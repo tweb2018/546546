@@ -4,13 +4,15 @@ const jwt = require('jsonwebtoken');
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-  email: String,
-  hash: String,
-  salt: String
-});
-
-mongoose.model('User', UserSchema);
+const UserSchema = new Schema(
+  {
+    email: String,
+    hash: String,
+    salt: String
+  },
+  // used to delete _v in mongoose object
+  { versionKey: false }
+);
 
 UserSchema.methods.setPassword = password => {
   this.salt = crypto.randomBytes(16).toString('hex');

@@ -2,8 +2,10 @@
 const Mongoose = require('mongoose');
 // To Avoid findAndModify is deprecated
 Mongoose.set('useFindAndModify', false);
+Mongoose.set('useCreateIndex', true);
 
-const User = require('../models/usersModel');
+const User = require('../models/users');
+const Book = require('../models/books');
 
 /* **********************************************************************************************
  *
@@ -24,6 +26,7 @@ class DataBase {
       process.env.NODE_MODE !== 'production'
         ? 'mongodb://localhost:12345'
         : process.env.DB_URL;
+
     this.db = null;
   }
 
@@ -168,6 +171,104 @@ class DataBase {
       }
     );
   }
+
+  /* *************************************************************
+   *
+   * @function insertBook(book, done)
+   * @param book The book to insert
+   * @param done Use only this for testing callback
+   * @description construction and insertion of a book in DB
+   *
+   ************************************************************ */
+  insertBook(book, done) {
+    const dbBook = new Book({
+      cache_timestamp: book.cache_timestamp,
+      authors: book.authors,
+      title: book.title,
+      permalink: book.permalink,
+      summary: book.summary,
+      publishedDate: book.publishedDate
+    });
+
+    Book.findOne({ permalink: book.permalink }).then(result => {
+      if (result === null) {
+        this.saveInDB(dbBook, done);
+      }
+    });
+  }
+
+  /* *************************************************************
+   *
+   * @function insertBook(book, done)
+   * @param book The book to insert
+   * @param done Use only this for testing callback
+   * @description construction and insertion of a book in DB
+   *
+   ************************************************************ */
+  insertBooks(books, done) {
+    books.map(book => this.insertBook(book, done));
+  }
+
+  /* *************************************************************
+   *
+   * @function getBooks(title)
+   * @param text The book's title
+   * @description find book in DB
+   * @return null or the Book found in DB
+   *
+   ************************************************************ */
+  getBooks(text) {
+    // Use Regex to make a LIKE search
+    // prettier-ignore
+    return Book.search(text)
+      .then(dbBook => {
+        return dbBook;
+      })
+      .catch(err => {
+        // Difficult to test
+        /* istanbul ignore next */
+        /* eslint-disable no-lone-blocks */
+        {
+          console.log(err.message);
+          return null;
+        }
+        /* eslint-enable no-lone-blocks */
+      });
+  }
+
+  /* *************************************************************
+   *
+   * @function updateBook()
+   * @param book The book to update
+   * @param done Use only this for testing callback
+   * @description Update a book
+   *
+   ************************************************************ */
+  updateBook(book, done) {
+    Book.findOneAndUpdate(
+      { id: book.id },
+      book,
+      { runValidators: true },
+      err => {
+        // Difficult to test
+        /* istanbul ignore if */
+        if (err) {
+          console.log(`Error during update of book ${book.title}`);
+        } else {
+          console.log(`Update of book ${book.title}`);
+          // for test purpose
+          if (typeof done === 'function') done();
+        }
+      }
+    );
+  }
 }
 
-module.exports = DataBase;
+const db = new DataBase({});
+
+/* istanbul ignore if  */
+if (process.env.NODE_MODE !== 'test') {
+  db.connect();
+}
+
+module.exports = { db };
