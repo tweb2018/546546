@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
-const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 const Schema = mongoose.Schema;
 
@@ -10,19 +10,19 @@ const UserSchema = new Schema({
   salt: String
 });
 
-mongoose.model("User", UserSchema);
+mongoose.model('User', UserSchema);
 
 UserSchema.methods.setPassword = password => {
-  this.salt = crypto.randomBytes(16).toString("hex");
+  this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto
-    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
-    .toString("hex");
+    .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
+    .toString('hex');
 };
 
 UserSchema.methods.validatePassword = password => {
   this.hash = crypto
-    .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
-    .toString("hex");
+    .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
+    .toString('hex');
   return this.hash === hash;
 };
 
@@ -37,7 +37,7 @@ UserSchema.methods.generateJWT = () => {
       id: this._id,
       exp: parseInt(expirationDate.getTime() / 1000, 10)
     },
-    "secret"
+    'secret'
   );
 };
 
@@ -49,4 +49,4 @@ UserSchema.methods.toAuthJson = () => {
   };
 };
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model('user', UserSchema);

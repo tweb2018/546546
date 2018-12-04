@@ -7,6 +7,19 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
+  "eslintConfig": {
+    "extends": "airbnb-base"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "git add"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -30,6 +43,11 @@
   "devDependencies": {
     "dotenv": "^6.1.0",
     "eslint": "^5.9.0",
-    "nodemon": "^1.18.7"
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "nodemon": "^1.18.7",
+    "prettier": "^1.15.3"
   }
 }
