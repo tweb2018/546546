@@ -7,6 +7,10 @@ Mongoose.set('useCreateIndex', true);
 const User = require('../models/users');
 const Book = require('../models/books');
 
+// change this value if you want more or less time in cache
+const TIME_IN_CACHE = 5;
+const CACHE_TIME = process.env.NODE_MODE === 'test' ? 5 : TIME_IN_CACHE;
+
 /* **********************************************************************************************
  *
  * @class DataBase
@@ -58,6 +62,17 @@ class DataBase {
 
   /* *************************************************************
    *
+   * @function delay()
+   * @description calculated the delay between 2 requests on the same user or repo
+   * @return return this delay
+   *
+   ************************************************************ */
+  delay(queryDate) {
+    return (new Date() - queryDate) / 1000;
+  }
+
+  /* *************************************************************
+   *
    * @function close()
    * @description use for test purpose to close the connection
    *
@@ -84,10 +99,14 @@ class DataBase {
    ***************************************************************** */
   saveInDB(value, done) {
     return value.save(err => {
-      if (err) throw err.message;
+      if (err) {
+        console.log(err.message);
+        return false;
+      }
       console.log('Value saved in DB');
       // for test purpose
       if (typeof done === 'function') done();
+      return true;
     });
   }
 
@@ -108,7 +127,7 @@ class DataBase {
       firebaseUid: user.firebaseUid
     });
 
-    this.saveInDB(dbUser);
+    this.saveInDB(dbUser, done);
   }
 
   /* *************************************************************
@@ -181,20 +200,39 @@ class DataBase {
    *
    ************************************************************ */
   insertBook(book, done) {
-    const dbBook = new Book({
-      cache_timestamp: book.cache_timestamp,
-      authors: book.authors,
-      title: book.title,
-      permalink: book.permalink,
-      summary: book.summary,
-      publishedDate: book.publishedDate
-    });
+    // Custom save or update
+    Book.findOne({
+      $or: [{ id: book.id }, { permalink: book.permalink }]
+    })
+      .then(findBook => {
+        if (findBook === null) {
+          const dbBook = new Book({
+            id: book.id,
+            cache_timestamp: book.cache_timestamp,
+            authors: book.authors,
+            title: book.title,
+            permalink: book.permalink,
+            summary: book.summary,
+            publishedDate: book.publishedDate,
+            thumbnail: book.thumbnail
+          });
+          return this.saveInDB(dbBook, done);
+        } else {
+          const time = this.delay(findBook.cache_timestamp);
+          console.log(`${time} seconds since last query`);
 
-    Book.findOne({ permalink: book.permalink }).then(result => {
-      if (result === null) {
-        this.saveInDB(dbBook, done);
-      }
-    });
+          if (time > CACHE_TIME) {
+            this.updateBook(findBook, done);
+          }
+
+          return true;
+        }
+      })
+      .catch(err => {
+        {
+          console.log(err.message);
+        }
+      });
   }
 
   /* *************************************************************
@@ -206,7 +244,7 @@ class DataBase {
    *
    ************************************************************ */
   insertBooks(books, done) {
-    books.map(book => this.insertBook(book, done));
+    return books.filter(book => this.insertBook(book, done));
   }
 
   /* *************************************************************

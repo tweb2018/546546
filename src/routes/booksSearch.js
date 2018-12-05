@@ -5,7 +5,7 @@ const books = require('google-books-search');
 
 const { db } = require('../dataBase/database');
 
-getPermalink = title => {
+const getPermalink = title => {
   return title
     .toLowerCase()
     .replace(/[^\w ]+/g, '')
@@ -15,6 +15,8 @@ getPermalink = title => {
 router.get('/book/:title', (req, res) => {
   const titleSearch = req.params.title;
 
+  // TODO Trouver une solution pour retourner uniquement les bouquin insérer
+  // Attention au problèmes asynchrone
   db.getBooks(titleSearch).then(booksSearch => {
     // If not found on database, search online
     if (booksSearch.length === 0) {
@@ -27,7 +29,8 @@ router.get('/book/:title', (req, res) => {
             title: book.title,
             permalink: getPermalink(book.title),
             summary: book.description || '',
-            publishedDate: book.publishedDate
+            publishedDate: book.publishedDate,
+            thumbnail: book.thumbnail
           }));
           res.send(searchResult);
           db.insertBooks(searchResult);

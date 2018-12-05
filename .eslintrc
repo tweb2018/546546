@@ -1,5 +1,5 @@
 {
-  "extends": ["prettier", "plugin:prettier/recommended"],
+  "extends": ["airbnb", "prettier", "plugin:prettier/recommended"],
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
@@ -11,6 +11,10 @@
     "quotes": ["error", "single"]
   },
   "env": {
+    "node": true,
     "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
   }
 }
