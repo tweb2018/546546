@@ -3,7 +3,7 @@ const Mongoose = require('mongoose');
 // To Avoid findAndModify is deprecated
 Mongoose.set('useFindAndModify', false);
 
-const User = require('../models/usersModel');
+const User = require('../models/users');
 
 /* **********************************************************************************************
  *
@@ -25,6 +25,15 @@ class DataBase {
         ? 'mongodb://localhost:12345'
         : process.env.DB_URL;
     this.db = null;
+
+    this.connect = this.connect.bind(this);
+    this.close = this.close.bind(this);
+    this.clear = this.clear.bind(this);
+    this.saveInDB = this.saveInDB.bind(this);
+
+    this.insertUser = this.insertUser.bind(this);
+    this.getUser = this.getUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
   // initialize db connection
@@ -75,17 +84,22 @@ class DataBase {
 
   /* *************************************************************
    *
-   * @function saveInDB(value)
+   * @function saveInDB
+   * @param value The value to save
+   * @return A Promise which you can catch the saved book with a then()
    * @description save the value in DB
    *
    ***************************************************************** */
   saveInDB(value, done) {
-    return value.save(err => {
-      if (err) throw err.message;
-      console.log('Value saved in DB');
-      // for test purpose
-      if (typeof done === 'function') done();
-    });
+    return value
+      .save()
+      .then(result => {
+        return result;
+      })
+      .catch(error => {
+        console.log(error);
+        if (typeof done === 'function') done();
+      });
   }
 
   /* *************************************************************
@@ -168,67 +182,8 @@ class DataBase {
       }
     );
   }
-
-  /* *************************************************************
-   *
-   * @function getBooks(title)
-   * @param text The book's title
-   * @description find book in DB
-   * @return null or the Book found in DB
-   *
-   ************************************************************ */
-  getBooks(text) {
-    // Use Regex to make a LIKE search
-    // prettier-ignore
-    return Book.search(text)
-      .then(dbBook => {
-        return dbBook;
-      })
-      .catch(err => {
-        // Difficult to test
-        /* istanbul ignore next */
-        /* eslint-disable no-lone-blocks */
-        {
-          console.log(err.message);
-          return null;
-        }
-        /* eslint-enable no-lone-blocks */
-      });
-  }
-
-  /* *************************************************************
-   *
-   * @function updateBook()
-   * @param book The book to update
-   * @param done Use only this for testing callback
-   * @description Update a book
-   *
-   ************************************************************ */
-  updateBook(book, done) {
-    Book.findOneAndUpdate(
-      { id: book.id },
-      book,
-      { runValidators: true },
-      err => {
-        // Difficult to test
-        /* istanbul ignore if */
-        if (err) {
-          console.log(`Error during update of book ${book.title}`);
-        } else {
-          console.log(`Update of book ${book.title}`);
-          // for test purpose
-          if (typeof done === 'function') done();
-        }
-      }
-    );
-  }
 }
 
 const db = new DataBase({});
-
-/* istanbul ignore if  */
-if (process.env.NODE_MODE !== 'test') {
-  db.connect();
-}
 
 module.exports = { db, DataBase };

@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tweb2018/Backend_BookBook"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
@@ -23,6 +27,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server": "^2.2.6",
     "apollo-server-express": "^2.2.5",
     "auth0-lock": "^11.12.1",
     "connect-flash": "^0.1.1",
@@ -33,7 +38,8 @@
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "google-books-search": "^0.3.1",
-    "graphql": "^14.0.2",
+    "graphql": "^0.13.2",
+    "graphql-custom-types": "^1.5.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.10",
@@ -42,13 +48,14 @@
     "mongoose-regex-search": "^0.5.2",
     "passport": "^0.4.0",
     "passport-auth0": "^1.1.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "query-string": "^6.2.0"
   },
   "devDependencies": {
     "dotenv": "^6.1.0",
     "eslint": "^5.9.0",
-    "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",

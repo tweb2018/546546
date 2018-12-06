@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./src/graphql/schema');
-const DataBase = require('./src/dataBase/database');
+const { db } = require('./src/dataBase/database');
 
 require('dotenv').config({ path: `${__dirname}/.env` });
 
@@ -18,8 +18,10 @@ app.use(express.json());
 app.use('/', indexRouter);
 app.use('/api', auth);
 
-const books = require('./src/routes/booksSearch');
-app.get('/book/:title', books);
+/* istanbul ignore if  */
+if (process.env.NODE_MODE !== 'test') {
+  db.connect();
+}
 
 const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });

@@ -1,34 +1,36 @@
 const { gql } = require('apollo-server-express');
 const { find, filter } = require('lodash');
+const {
+  GraphQLEmail,
+  GraphQLURL,
+  GraphQLDateTime,
+  GraphQLLimitedString,
+  GraphQLPassword,
+  GraphQLUUID
+} = require('graphql-custom-types');
 
-const books = [
-  {
-    id: 1,
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling'
-  },
-  {
-    id: 2,
-    title: 'Jurassic Park',
-    author: 'Michael Crichton'
-  }
-];
+const bookService = require('../services/bookService');
 
 const typeDefs = gql`
+  scalar URL
+  scalar Email
+  scalar DateTime
+  scalar LimitedString
+  scalar Password
+  scalar UUID
+
   type Book {
     id: ID!
     title: String
-    author: String
-  }
-
-  type Author {
-    name: String
-    books: [Book]
+    authors: [String]
+    summary: String
+    publishedDate: String
+    thumbnail: URL
   }
 
   type Query {
-    books: [Book]
-    book(id: ID!): Book
+    books(title: String): [Book]
+    book(id: String!): Book
   }
 `;
 
@@ -42,10 +44,21 @@ context: an object shared by all resolvers in GraphQL operation
 info: use this only in advanced cases.        
 */
 const resolvers = {
+  URL: GraphQLURL,
+  Email: GraphQLEmail,
+  DateTime: GraphQLDateTime,
+  LimitedString: GraphQLLimitedString,
+  Password: GraphQLPassword,
+  UUID: GraphQLUUID,
+
   Query: {
-    books: (parent, args, context, info) => books,
+    // args : book title (optional)
+    books: (parent, args, context, info) => {
+      return bookService.getBooks(args.title);
+    },
+    // args : book permalink
     book: (parent, args, context, info) => {
-      return find(book, { id: args.id });
+      return bookService.getBook(args.id);
     }
   }
 };

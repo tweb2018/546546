@@ -6,8 +6,10 @@ mongoose.plugin(require('mongoose-regex-search'));
 
 const schema = new Schema(
   {
-    id: { type: String, unique: true },
-    permalink: { type: String, unique: true },
+    id: {
+      type: String,
+      searchable: false
+    },
     cache_timestamp: Date,
     authors: {
       type: [String],
