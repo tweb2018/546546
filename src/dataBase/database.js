@@ -171,3 +171,67 @@ class DataBase {
 }
 
 module.exports = DataBase;
+
+  /* *************************************************************
+   *
+   * @function getBooks(title)
+   * @param text The book's title
+   * @description find book in DB
+   * @return null or the Book found in DB
+   *
+   ************************************************************ */
+  getBooks(text) {
+    // Use Regex to make a LIKE search
+    // prettier-ignore
+    return Book.search(text)
+      .then(dbBook => {
+        return dbBook;
+      })
+      .catch(err => {
+        // Difficult to test
+        /* istanbul ignore next */
+        /* eslint-disable no-lone-blocks */
+        {
+          console.log(err.message);
+          return null;
+        }
+        /* eslint-enable no-lone-blocks */
+      });
+  }
+
+  /* *************************************************************
+   *
+   * @function updateBook()
+   * @param book The book to update
+   * @param done Use only this for testing callback
+   * @description Update a book
+   *
+   ************************************************************ */
+  updateBook(book, done) {
+    Book.findOneAndUpdate(
+      { id: book.id },
+      book,
+      { runValidators: true },
+      err => {
+        // Difficult to test
+        /* istanbul ignore if */
+        if (err) {
+          console.log(`Error during update of book ${book.title}`);
+        } else {
+          console.log(`Update of book ${book.title}`);
+          // for test purpose
+          if (typeof done === 'function') done();
+        }
+      }
+    );
+  }
+}
+
+const db = new DataBase({});
+
+/* istanbul ignore if  */
+if (process.env.NODE_MODE !== 'test') {
+  db.connect();
+}
+
+module.exports = { db };
