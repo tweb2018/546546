@@ -168,9 +168,6 @@ class DataBase {
       }
     );
   }
-}
-
-module.exports = DataBase;
 
   /* *************************************************************
    *
@@ -234,4 +231,4 @@ if (process.env.NODE_MODE !== 'test') {
   db.connect();
 }
 
-module.exports = { db };
+module.exports = { db, DataBase };

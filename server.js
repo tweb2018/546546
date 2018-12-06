@@ -1,21 +1,22 @@
 // server.js
 const express = require('express');
 const indexRouter = require('./src/routes/index');
+const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./src/graphql/schema');
 const DataBase = require('./src/dataBase/database');
 
-const db = new DataBase({});
 require('dotenv').config({ path: `${__dirname}/.env` });
-
-require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
+app.use(express.json());
+
 app.use('/', indexRouter);
+app.use('/api', auth);
 
 const books = require('./src/routes/booksSearch');
 app.get('/book/:title', books);
