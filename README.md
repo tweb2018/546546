@@ -16,9 +16,9 @@ You can find the front endpart here: https://github.com/bouda19/TWEB_Projet_2018
 
 ## Prepare for local environnement
 
-1. Create a folder named "data" in the root of the directory
+Create a folder named "data" in the root of the directory
 
-2. Install [mongodb](https://www.mongodb.com/download-center?initial=true#community) and run the following command. You need to be in the root of the project otherwise the command wont find the /data/ folder.
+Install [mongodb](https://www.mongodb.com/download-center?initial=true#community) and run the following command. You need to be in the root of the project otherwise the command wont find the /data/ folder.
    (On Windows you must Add MongoDB binaries to the System PATH "C:\Program Files\MongoDB\Server\4.0\bin" and restart Visual Studio Code)
 
 ```shell
@@ -27,8 +27,8 @@ mongod --dbpath=./data/ --port 12345
 
 Not that the local DB is running on port: 12345.
 
-2. Rename the .env.default in the root directory to .env file and edit the following configuration
-   (You must install dotenv Visual Studio Code plugin)
+Rename the .env.default in the root directory to .env file and edit the following configuration
+(You must install dotenv Visual Studio Code plugin)
 
 ```java
 PORT='3000'
@@ -37,27 +37,9 @@ GITHUB_URL='https://api.github.com/'
 NODE_MODE='xxx'
 ```
 
-Link to generate a Github Access Token:
-[Generate Tocken](https://blog.github.com/2013-05-16-personal-api-tokens/)
-
-ACCESS_TOKEN : Github token
-NODE_MODE : Value "test, "developement" or "production"
-
-Add this option to VSCode User Setting json
-
-```json
-  "workbench.iconTheme": "vscode-icons",
-  "editor.formatOnSave": true,
-  "eslint.autoFixOnSave": true,
-  "eslint.alwaysShowStatus": true,
-  "prettier.eslintIntegration": true,
-  "prettier.disableLanguages": ["js"],
-  "files.autoSave": "onFocusChange",
-```
-
 ## Before first Run of server
 
-3. Run this command on a terminal to install all dependencies.
+Run this command on a terminal to install all dependencies.
 
 ```shell
 npm install
@@ -65,17 +47,17 @@ npm install
 
 ## Run server
 
-4. Then you can run this command in an other terminal to start the server.
+Then you can run this command in an other terminal to start the server.
 
 ```shell
 npm start
 ```
 
-#### Api Call
+## Api Call
 
 You can use this route to ask for the github info on a user.
 
-5. /user/:username where username is the github login of the one you want to stalk.
+/user/:username where username is the github login of the one you want to stalk.
 
 exemple:
 
@@ -88,79 +70,7 @@ This call will return you a Json table with multiple information about 'testuser
 Exemple of Json response:
 
 ```javascript
-  {
-    error: 0,
-    query_date: "2018-10-27T10:55:20.283Z",
-    type: "User",
-    id: 9827392,
-    creation_date: "2014-11-18T18:14:13Z",
-    login: "thomaslc66",
-    name: null,
-    company: null,
-    location: null,
-    avatar: "https://avatars0.githubusercontent.com/u/9827392?v=4",
-    followers_count: 6,
-    following_count: 6,
-    public_repos_number: 24,
-    five_best_repo: [
-      {
-        repo_name: "sye_labo5",
-        repo_url: "https://api.github.com/repos/thomaslc66/sye_labo5",
-        watchers_count: 0,
-        stars_count: 0,
-        forks_count: 1
-      },
-      {
-        repo_name: "Plex_Media",
-        repo_url: "https://api.github.com/repos/thomaslc66/Plex_Media",
-        watchers_count: 0,
-        stars_count: 0,
-        forks_count: 0
-      },
-      {
-        repo_name: "AndroidCyclingTrainer",
-        repo_url: "https://api.github.com/repos/thomaslc66/AndroidCyclingTrainer",
-        watchers_count: 0,
-        stars_count: 0,
-        forks_count: 0
-      },
-      {
-        repo_name: "ArmagetronServer",
-        repo_url: "https://api.github.com/repos/thomaslc66/ArmagetronServer",
-        watchers_count: 0,
-        stars_count: 0,
-        forks_count: 0
-      },
-      {
-        repo_name: "ASD1_Labo3",
-        repo_url: "https://api.github.com/repos/thomaslc66/ASD1_Labo3",
-        watchers_count: 0,
-        stars_count: 0,
-        forks_count: 0
-      }
-    ],
-    language_used: [
-      {
-        name: "Java",
-        count: 10
-      },
-      {
-        name: "Python",
-        count: 8
-      },
-      {
-        name: "Go",
-        count: 3
-      },
-      {
-        name: "C",
-        count: 2
-      },
-      {
-        name: "unknown",
-        count: 2
-      }
-    ]
+ 
 }
 ```
 
@@ -195,11 +105,6 @@ Exemple of package.json
 Variable Needed
 
 ```java
-ACCESS_TOKEN='access_token'
-GITHUB_URL='https://api.github.com/'
-DB_NAME='db_name'
-DB_URL='mongodb://url_to_mongo_db'
-NODE_MODE='production'
 ```
 
 Exemple :
@@ -210,3 +115,13 @@ Exemple :
 8. Go to your app website and check the app with a user.
 
 Info: To deploy the app in production, you need to have also a prod mongoDB. For this you can use Mlab
+
+## Dependencies
+
+### Appollo Server Express
+
+See [https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-express](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-express)
+
+### Google book search
+
+See [https://www.npmjs.com/package/google-books-search](https://www.npmjs.com/package/google-books-search)
