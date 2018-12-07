@@ -44,7 +44,7 @@
     "lodash": "^4.17.11",
     "mongodb": "^3.1.10",
     "mongodb-core": "^3.1.9",
-    "mongoose": "^5.3.14",
+    "mongoose": "^5.3.15",
     "mongoose-regex-search": "^0.5.2",
     "passport": "^0.4.0",
     "passport-auth0": "^1.1.0",
