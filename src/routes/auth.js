@@ -1,46 +1,39 @@
 // routes/auth.js
+const express = require("express");
+const router = express.Router();
+const admin = require("firebase-admin");
 
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
+const serviceAccount = require("../utils/bookbook-c5c5c-firebase-adminsdk-dt3of-4017bc972e");
+
+const firebaseAdmin = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://bookbook-c5c5c.firebaseio.com"
+});
+
+//Create authentication middle
+isAuthenticated = (req, res, next) => {
+  // check if user is logged in
+  // if they are not send and unathorized response
+  return true;
+};
 
 // Perform the login, after login Auth0 will redirect to callback
-router.post('/register', (req, res) => {
+router.post("/register", (req, res) => {
   const { email, username, password, firstName, lastName, token } = req.body;
   res.json({
     email,
     firstName,
     lastName,
     username,
-    password: '*'.repeat(password.length),
+    password: "*".repeat(password.length),
     token
   });
 });
 
-// Perform the final stage of authentication and redirect to previously requested URL or '/user'
-router.get('/callback', function(req, res, next) {
-  passport.authenticate('auth0', function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.redirect('/login');
-    }
-    req.logIn(user, function(err) {
-      if (err) {
-        return next(err);
-      }
-      const returnTo = req.session.returnTo;
-      delete req.session.returnTo;
-      res.redirect(returnTo || '/user');
-    });
-  })(req, res, next);
-});
-
-// Perform session logout and redirect to homepage
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
+//if user are authenticated they can acces profile info
+router.get("/me", isAuthenticated, (req, res, next) => {
+  //
+  res.send("Hello from the other side");
 });
 
 module.exports = router;
