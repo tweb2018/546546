@@ -9,9 +9,14 @@ class BookService {
     this.searchOnline = this.searchOnline.bind(this);
   }
 
-  searchOnline(title) {
+  searchOnline(text, limit) {
+    const limitValue = limit === undefined ? 10 : limit;
+    const options = {
+      limit: limitValue
+    };
+
     return new Promise((resolve, reject) => {
-      googleBooks.search(title, (error, results) => {
+      googleBooks.search(text, options, (error, results) => {
         if (error === null) {
           const searchResult = results.map(book => ({
             id: book.id,
@@ -34,15 +39,15 @@ class BookService {
     });
   }
 
-  getBooks(title) {
+  getBooks(text, limit) {
     return bookDatabase
-      .getBooks(title)
+      .getBooks(text, limit)
       .then(results => {
         if (results.length === 0) {
-          return this.searchOnline(title);
+          return this.searchOnline(text, limit);
         } else {
           // to refresh data but no need to wait
-          this.searchOnline(title);
+          this.searchOnline(text, limit);
           return results;
         }
       })

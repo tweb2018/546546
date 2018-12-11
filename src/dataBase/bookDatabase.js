@@ -68,9 +68,9 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  getBooks(title, done) {
-    return Book.search(title)
-      .limit(10)
+  getBooks(text, limit, done) {
+    return Book.search(text)
+      .limit(limit)
       .then(results => {
         if (typeof done === 'function') done();
         return results;

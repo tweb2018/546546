@@ -29,7 +29,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    books(title: String): [Book]
+    books(text: String, limit: Int): [Book]
     book(id: String!): Book
   }
 `;
@@ -52,11 +52,11 @@ const resolvers = {
   UUID: GraphQLUUID,
 
   Query: {
-    // args : book title (optional)
+    // args : book text (optional)
     books: (parent, args, context, info) => {
-      return bookService.getBooks(args.title);
+      return bookService.getBooks(args.text, args.limit);
     },
-    // args : book permalink
+    // args : book id
     book: (parent, args, context, info) => {
       return bookService.getBook(args.id);
     }
