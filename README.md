@@ -3,6 +3,8 @@ https://medium.freecodecamp.org/learn-how-to-handle-authentication-with-node-usi
 
 https://auth0.com/docs/quickstart/webapp/nodejs/01-login
 
+https://www.youtube.com/watch?v=yvmy5u3PkeM&index=10&list=PLJm7_t7JnSjn__VC3sK86o2YlUuwlPKkO
+
 # TWEB_Projet_2018
 
 This project is part of the TWEB 2018 cours. The goal was to use the github API and create an app with a Backend server and a frontend (GUI).
@@ -19,7 +21,7 @@ You can find the front endpart here: https://github.com/bouda19/TWEB_Projet_2018
 Create a folder named "data" in the root of the directory
 
 Install [mongodb](https://www.mongodb.com/download-center?initial=true#community) and run the following command. You need to be in the root of the project otherwise the command wont find the /data/ folder.
-   (On Windows you must Add MongoDB binaries to the System PATH "C:\Program Files\MongoDB\Server\4.0\bin" and restart Visual Studio Code)
+(On Windows you must Add MongoDB binaries to the System PATH "C:\Program Files\MongoDB\Server\4.0\bin" and restart Visual Studio Code)
 
 ```shell
 mongod --dbpath=./data/ --port 12345
@@ -70,7 +72,7 @@ This call will return you a Json table with multiple information about 'testuser
 Exemple of Json response:
 
 ```javascript
- 
+
 }
 ```
 
@@ -105,6 +107,7 @@ Exemple of package.json
 Variable Needed
 
 ```java
+
 ```
 
 Exemple :
