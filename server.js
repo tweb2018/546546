@@ -9,7 +9,7 @@ const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const {
-  ApolloServer
+  ApolloServer,
 } = require('apollo-server-express');
 const {
   typeDefs,
@@ -51,13 +51,15 @@ const server = new ApolloServer({
     };
   }
 });
+
 server.applyMiddleware({
-  app
+  app,
+  apiKey: process.env.ENGINE_API_KEY
 });
 
 const port = process.env.PORT;
 app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
+  console.log(`Listening on http://localhost:${port}${server.graphqlPath}`);
 });
 
 module.exports = {
