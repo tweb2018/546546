@@ -49,9 +49,10 @@ const server = new ApolloServer({
   }
 });
 
+const path = '/graphql';
 server.applyMiddleware({
   app,
-  cors: true
+  path
 });
 
 const port = process.env.PORT;
