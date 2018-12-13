@@ -1,16 +1,31 @@
 // server.js
+if (process.env.NODE_MODE !== "production") {
+  require('dotenv').config({
+    path: `${__dirname}/.env`
+  });
+}
+
 const express = require('express');
 const indexRouter = require('./src/routes/index');
 const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, resolvers } = require('./src/graphql/schema');
-const { db } = require('./src/dataBase/database');
-const { userService } = require('./src/services/userService');
-const { getUuidToken } = require('./src/middleware/firebase-auth');
-
-require('dotenv').config({ path: `${__dirname}/.env` });
+const {
+  ApolloServer
+} = require('apollo-server-express');
+const {
+  typeDefs,
+  resolvers
+} = require('./src/graphql/schema');
+const {
+  db
+} = require('./src/dataBase/database');
+const {
+  userService
+} = require('./src/services/userService');
+const {
+  getUuidToken
+} = require('./src/middleware/firebase-auth');
 
 const app = express();
 
@@ -29,17 +44,25 @@ if (process.env.NODE_MODE !== 'test') {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
+  context: ({
+    req
+  }) => {
     const token = req.header('Authorization') || '';
     const uuid = getUuidToken(token);
-    return { uuid };
+    return {
+      uuid
+    };
   }
 });
-server.applyMiddleware({ app });
+server.applyMiddleware({
+  app
+});
 
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
 
-module.exports = { app };
+module.exports = {
+  app
+};
