@@ -23,8 +23,9 @@ router.post('/login', (req, res) => {
 });
 
 //if user are authenticated they can acces profile info
-router.get('/me', isAuthenticated, (req, res, next) => {
+router.get('/profile', isAuthenticated, (req, res, next) => {
   //
+
   res.json({
     message: `You're logged in as ${res.locals.user.email} with Firebase UID: ${
       res.locals.user.uid
