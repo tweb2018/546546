@@ -90,6 +90,6 @@ class UserDatabase extends DataBase {
     }
 }
 
-const bookService = new BookService();
+const userDatabase = new UserDatabase();
 
-module.exports = bookService;
+module.exports = userDatabase;

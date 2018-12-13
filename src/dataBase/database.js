@@ -30,10 +30,6 @@ class DataBase {
     this.close = this.close.bind(this);
     this.clear = this.clear.bind(this);
     this.saveInDB = this.saveInDB.bind(this);
-
-    this.insertUser = this.insertUser.bind(this);
-    this.getUser = this.getUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
   }
 
   // initialize db connection
