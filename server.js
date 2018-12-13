@@ -27,7 +27,19 @@ const {
 
 const app = express();
 
-app.use(cors());
+// Set up a whitelist and check against it:
+var whitelist = [process.env.WHITELIST_HOST]
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/', indexRouter);
