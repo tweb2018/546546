@@ -6,6 +6,8 @@ const isAuthenticated = require('../middleware/firebase-auth');
 // Perform the login, after login Auth0 will redirect to callback
 router.post('/register', (req, res) => {
   const { email, username, password, firstName, lastName, token } = req.body;
+
+  //TODO Save in DB
   res.json({
     email,
     firstName,
