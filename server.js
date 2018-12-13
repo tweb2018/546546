@@ -7,10 +7,9 @@ const express = require('express');
 const indexRouter = require('./src/routes/index');
 const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const {
   ApolloServer,
-} = require('apollo-server-express');
+} = require('apollo-server');
 const {
   typeDefs,
   resolvers
@@ -21,14 +20,6 @@ const {
 const {
   getUuidToken
 } = require('./src/middleware/firebase-auth');
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.use('/', indexRouter);
-app.use('/api', auth);
 
 /* istanbul ignore if  */
 if (process.env.NODE_MODE !== 'test') {
@@ -49,17 +40,13 @@ const server = new ApolloServer({
   }
 });
 
-const path = '/graphql';
-server.applyMiddleware({
-  app,
-  path
-});
-
 const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}${server.graphqlPath}`);
+server.listen().then(({
+  url
+}) => {
+  console.log(`Listening on ${url}${server.graphqlPath}`);
 });
 
 module.exports = {
-  app
+  server
 };
