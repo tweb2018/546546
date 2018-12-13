@@ -7,7 +7,6 @@ const express = require('express');
 const indexRouter = require('./src/routes/index');
 const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const {
   ApolloServer,
 } = require('apollo-server-express');
@@ -24,16 +23,9 @@ const {
 
 const app = express();
 
-app.use(cors());
+// Do not use cors, appollo-server v2 add automaticly cors
+// If you do that you override appollo server cors config
 app.use(express.json());
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", '*');
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  next();
-});
 
 app.use('/', indexRouter);
 app.use('/api', auth);
@@ -58,11 +50,7 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({
-  app,
-  apiKey: process.env.ENGINE_API_KEY,
-  cors: {
-    origin: process.env.WHITELIST_HOST
-  }
+  app
 });
 
 const port = process.env.PORT;
