@@ -19,9 +19,6 @@ const {
   db
 } = require('./src/dataBase/database');
 const {
-  userService
-} = require('./src/services/userService');
-const {
   getUuidToken
 } = require('./src/middleware/firebase-auth');
 
@@ -62,7 +59,10 @@ const server = new ApolloServer({
 
 server.applyMiddleware({
   app,
-  apiKey: process.env.ENGINE_API_KEY
+  apiKey: process.env.ENGINE_API_KEY,
+  cors: {
+    origin: process.env.WHITELIST_HOST
+  }
 });
 
 const port = process.env.PORT;
