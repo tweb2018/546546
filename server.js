@@ -1,9 +1,7 @@
 // server.js
-if (process.env.NODE_MODE !== "production") {
-  require('dotenv').config({
-    path: `${__dirname}/.env`
-  });
-}
+require('dotenv').config({
+  path: `${__dirname}/.env`
+});
 
 const express = require('express');
 const indexRouter = require('./src/routes/index');

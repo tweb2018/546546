@@ -3,8 +3,6 @@ const Mongoose = require('mongoose');
 // To Avoid findAndModify is deprecated
 Mongoose.set('useFindAndModify', false);
 
-const User = require('../models/users');
-
 /* **********************************************************************************************
  *
  * @class DataBase
@@ -20,10 +18,7 @@ class DataBase {
    *************************************************** */
   constructor() {
     this.dbName = process.env.DB_NAME;
-    this.dbUrl =
-      process.env.NODE_MODE !== 'production' ?
-      'mongodb://localhost:12345' :
-      process.env.DB_URL;
+    this.dbUrl = process.env.DB_URL;
     this.db = null;
 
     this.connect = this.connect.bind(this);
