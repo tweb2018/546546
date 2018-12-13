@@ -2,10 +2,6 @@ const {
   gql
 } = require('apollo-server-express');
 const {
-  find,
-  filter
-} = require('lodash');
-const {
   GraphQLEmail,
   GraphQLURL,
   GraphQLDateTime,
@@ -32,6 +28,7 @@ const typeDefs = gql `
     summary: String
     published_date: String
     thumbnail: URL
+    comments: [Comment]
   }
 
   type User {
@@ -45,13 +42,13 @@ const typeDefs = gql `
 
   # TODO => Patrick
   type Comment {
-    
+    id:ID!
   }
 
   type Query {
     books(text: String, limit: Int): [Book]
     book(id: String!): Book
-    profile() User
+    profile: User
   }
 `;
 
