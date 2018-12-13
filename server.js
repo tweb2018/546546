@@ -50,11 +50,7 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({
-  app,
-  apiKey: process.env.ENGINE_API_KEY,
-  cors: {
-    origin: process.env.WHITELIST_HOST
-  }
+  app
 });
 
 const port = process.env.PORT;
