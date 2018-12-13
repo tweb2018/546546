@@ -4,11 +4,13 @@ const Schema = mongoose.Schema;
 
 mongoose.plugin(require('mongoose-regex-search'));
 
-const schema = new Schema(
-  {
+const schema = new Schema({
     id: {
-      type: String,
-      searchable: false
+      type: ObjectId,
+      searchable: false,
+      index: {
+        unique: true
+      }
     },
     cache_timestamp: Date,
     authors: {
@@ -23,14 +25,19 @@ const schema = new Schema(
       type: String,
       searchable: true
     },
-    publishedDate: Date,
+    published_date: Date,
     thumbnail: {
       type: String,
       searchable: false
+    },
+    comments: {
+      type: [ObjectId]
     }
   },
   // used to delete _v in mongoose object
-  { versionKey: false }
+  {
+    versionKey: false
+  }
 );
 
 module.exports = mongoose.model('book', schema);

@@ -1,5 +1,5 @@
+const mongoose = require('mongoose');
 const googleBooks = require('google-books-search');
-
 const bookDatabase = require('../dataBase/bookDatabase');
 
 class BookService {
@@ -19,12 +19,12 @@ class BookService {
       googleBooks.search(text, options, (error, results) => {
         if (error === null) {
           const searchResult = results.map(book => ({
-            id: book.id,
+            id: mongoose.Types.ObjectId(book.id),
             cache_timestamp: new Date(),
             authors: book.authors,
             title: book.title,
             summary: book.description || '',
-            publishedDate: book.publishedDate,
+            published_date: book.publishedDate,
             thumbnail: book.thumbnail
           }));
 
@@ -68,8 +68,13 @@ class BookService {
         return error;
       });
   }
+
+  // retrive all comments
+  bookComments(bookId) {
+    // TODO => Patrick
+  }
 }
 
-const bookService = new BookService({});
+const bookService = new BookService();
 
 module.exports = bookService;

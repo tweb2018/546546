@@ -1,15 +1,44 @@
 const userDataBase = require('../dataBase/userDatabase');
 
 class UserService {
-  // Get profile
-  getUser(userId) {}
-  // update profile
-  updateUser(user) {}
-  // change password
-  changeUserPassword(newPassword) {}
-  // retrive all comments
-  userComments(userId) {}
+  getUser(id) {
+    return userDataBase
+      .getUser(id)
+      .then(result => {
+        return result;
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  }
 
+  insertUser(user) {
+    return userDataBase.insertUser(user)
+      .then(result => {
+        return result;
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  }
+
+  updateUser(user) {
+    return bookDatabase
+      .updateUser(user)
+      .then(result => {
+        return result;
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  }
+
+  userComments(userId) {
+    // TODO => Patrick
+  }
   /*  Optional */
   // Delete profile
 }

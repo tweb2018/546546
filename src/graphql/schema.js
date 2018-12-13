@@ -1,5 +1,10 @@
-const { gql } = require('apollo-server-express');
-const { find, filter } = require('lodash');
+const {
+  gql
+} = require('apollo-server-express');
+const {
+  find,
+  filter
+} = require('lodash');
 const {
   GraphQLEmail,
   GraphQLURL,
@@ -12,7 +17,7 @@ const {
 const bookService = require('../services/bookService');
 const userService = require('../services/userService');
 
-const typeDefs = gql`
+const typeDefs = gql `
   scalar URL
   scalar Email
   scalar DateTime
@@ -25,8 +30,22 @@ const typeDefs = gql`
     title: String
     authors: [String]
     summary: String
-    publishedDate: String
+    published_date: String
     thumbnail: URL
+  }
+
+  type User {
+    id: ID!
+    login: String
+    first_name: String
+    last_name: String
+    email: Email
+    comments: [Comment]
+  }
+
+  # TODO => Patrick
+  type Comment {
+    
   }
 
   type Query {
@@ -74,4 +93,7 @@ const resolvers = {
   }
 };
 
-module.exports = { typeDefs, resolvers };
+module.exports = {
+  typeDefs,
+  resolvers
+};

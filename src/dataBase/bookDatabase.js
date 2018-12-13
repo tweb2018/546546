@@ -1,6 +1,8 @@
 const Book = require('../models/books');
 const tools = require('../utils/tools');
-const { DataBase } = require('./database');
+const {
+  DataBase
+} = require('./database');
 
 // change this value if you want more or less time in cache
 const TIME_IN_CACHE = 5;
@@ -19,6 +21,7 @@ class BookDatabase extends DataBase {
     this.insertBooks = this.insertBooks.bind(this);
     this.updateBook = this.updateBook.bind(this);
     this.getBook = this.getBook.bind(this);
+    this.getBooks = this.getBooks.bind(this);
   }
 
   /* *************************************************************
@@ -32,7 +35,9 @@ class BookDatabase extends DataBase {
    ************************************************************ */
   insertBook(book, done) {
     // Custom save or update
-    return Book.findOne({ id: book.id })
+    return Book.findOne({
+        id: book.id
+      })
       .then(findBook => {
         if (findBook === null) {
           const dbBook = new Book({
@@ -41,7 +46,7 @@ class BookDatabase extends DataBase {
             authors: book.authors,
             title: book.title,
             summary: book.summary,
-            publishedDate: book.publishedDate,
+            published_date: book.published_date,
             thumbnail: book.thumbnail
           });
 
@@ -91,7 +96,9 @@ class BookDatabase extends DataBase {
    *
    ************************************************************ */
   getBook(id, done) {
-    return Book.findOne({ id: id })
+    return Book.findOne({
+        id: id
+      })
       .then(result => {
         if (typeof done === 'function') done();
         return result;
@@ -125,7 +132,11 @@ class BookDatabase extends DataBase {
    *
    ************************************************************ */
   updateBook(book, done) {
-    return Book.findOneAndUpdate({ id: book.id }, book, { runValidators: true })
+    return Book.findOneAndUpdate({
+        id: book.id
+      }, book, {
+        runValidators: true
+      })
       .then(result => {
         if (typeof done === 'function') done();
         return result;

@@ -21,9 +21,9 @@ class DataBase {
   constructor() {
     this.dbName = process.env.DB_NAME;
     this.dbUrl =
-      process.env.NODE_MODE !== 'production'
-        ? 'mongodb://localhost:12345'
-        : process.env.DB_URL;
+      process.env.NODE_MODE !== 'production' ?
+      'mongodb://localhost:12345' :
+      process.env.DB_URL;
     this.db = null;
 
     this.connect = this.connect.bind(this);
@@ -39,8 +39,7 @@ class DataBase {
   // initialize db connection
   connect(done) {
     Mongoose.connect(
-      `${this.dbUrl}/${this.dbName}`,
-      {
+      `${this.dbUrl}/${this.dbName}`, {
         useNewUrlParser: true
       },
       done
@@ -101,89 +100,11 @@ class DataBase {
         if (typeof done === 'function') done();
       });
   }
-
-  /* *************************************************************
-   *
-   * @function insertUser()
-   * @description construction and insertion of a user in DB
-   *
-   ************************************************************ */
-  insertUser(user, done) {
-    const dbUser = new User({
-      id: user.id,
-      creation_date: user.creation_date,
-      login: user.login,
-      name: user.name,
-      location: user.location,
-      avatar: user.avatar,
-      firebaseUid: user.firebaseUid
-    });
-
-    this.saveInDB(dbUser);
-  }
-
-  /* *************************************************************
-   *
-   * @function getUser()
-   * @description find user in DB
-   * @return null or the User found in DB
-   *
-   ************************************************************ */
-  getUser(login) {
-    return User.findOne({ login })
-      .then(dbUser => dbUser.toObject())
-      .catch(err => {
-        // Difficult to test
-        /* istanbul ignore next */
-        /* eslint-disable no-lone-blocks */
-        {
-          console.log(err.message);
-          return null;
-        }
-        /* eslint-enable no-lone-blocks */
-      });
-  }
-
-  /* *************************************************************
-   *
-   * @function updateUser()
-   * @description
-   * @return
-   *
-   ************************************************************ */
-  updateUser(user, done) {
-    User.findOneAndUpdate(
-      { id: user.id },
-      user,
-      { runValidators: true },
-      err => {
-        // Difficult to test
-        /* istanbul ignore if */
-        if (err) {
-          console.log(`Error during update of user ${user.login}`);
-        } else {
-          console.log(`Update of user ${user.login}`);
-          // TODO Update queryDate of cached user
-          CacheUser.findOneAndUpdate(
-            { id: user.id },
-            { query_date: new Date() },
-            { runValidators: true },
-            error => {
-              // Difficult to test
-              /* istanbul ignore if */
-              if (error) {
-                console.log(`Error during cache update ${err.message}`);
-              }
-              // for test purpose
-              if (typeof done === 'function') done();
-            }
-          );
-        }
-      }
-    );
-  }
 }
 
-const db = new DataBase({});
+const db = new DataBase();
 
-module.exports = { db, DataBase };
+module.exports = {
+  db,
+  DataBase
+};
