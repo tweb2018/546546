@@ -10,6 +10,7 @@ const {
 } = require('graphql-custom-types');
 
 const bookService = require('../services/bookService');
+const userService = require('../services/userService');
 
 const typeDefs = gql`
   scalar URL
@@ -31,6 +32,7 @@ const typeDefs = gql`
   type Query {
     books(text: String, limit: Int): [Book]
     book(id: String!): Book
+    profile() User
   }
 `;
 
@@ -59,6 +61,15 @@ const resolvers = {
     // args : book id
     book: (parent, args, context, info) => {
       return bookService.getBook(args.id);
+    },
+
+    profile: (parent, args, context, info) => {
+      if (!context.uuid) {
+        //User === null donc non authentifié
+        return null;
+      } else {
+        return userService.getUser(context.uuid);
+      }
     }
   }
 };

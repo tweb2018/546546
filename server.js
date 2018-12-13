@@ -7,6 +7,8 @@ const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./src/graphql/schema');
 const { db } = require('./src/dataBase/database');
+const { userService } = require('./src/services/userService');
+const { getUuidToken } = require('./src/middleware/firebase-auth');
 
 require('dotenv').config({ path: `${__dirname}/.env` });
 
@@ -15,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use();
 app.use('/', indexRouter);
 app.use('/api', auth);
 
@@ -23,7 +26,15 @@ if (process.env.NODE_MODE !== 'test') {
   db.connect();
 }
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => {
+    const token = req.header('Authorization') || '';
+    const uuid = getUuidToken(token);
+    return { uuid };
+  }
+});
 server.applyMiddleware({ app });
 
 const port = process.env.PORT;

@@ -30,4 +30,24 @@ isAuthenticated = (req, res, next) => {
   }
 };
 
-module.exports = isAuthenticated;
+// return user if exist
+getUuidToken = authToken => {
+  if (!authToken) {
+    firebaseAdmin
+      .auth()
+      .verifyIdToken(authToken)
+      .then(decodedToken => {
+        return decodedToken.uid;
+        //next ou pas next
+        next();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    //no user found
+    next();
+  }
+};
+
+module.exports = { isAuthenticated, getUuidToken };

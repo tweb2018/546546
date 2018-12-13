@@ -1,7 +1,7 @@
 // routes/auth.js
 const express = require('express');
 const router = express.Router();
-const isAuthenticated = require('../middleware/firebase-auth');
+const { isAuthenticated } = require('../middleware/firebase-auth');
 
 // Perform the login, after login Auth0 will redirect to callback
 router.post('/register', (req, res) => {

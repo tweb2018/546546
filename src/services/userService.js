@@ -9,6 +9,7 @@ class UserService {
   changeUserPassword(newPassword) {}
   // retrive all comments
   userComments(userId) {}
+
   /*  Optional */
   // Delete profile
 }
