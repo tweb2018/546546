@@ -50,7 +50,8 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({
-  app
+  app,
+  cors: true
 });
 
 const port = process.env.PORT;
