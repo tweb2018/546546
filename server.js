@@ -8,23 +8,15 @@ const indexRouter = require('./src/routes/index');
 const auth = require('./src/routes/auth');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const {
-  ApolloServer,
-} = require('apollo-server-express');
-const {
-  typeDefs,
-  resolvers
-} = require('./src/graphql/schema');
-const {
-  db
-} = require('./src/dataBase/database');
-const {
-  getUuidToken
-} = require('./src/middleware/firebase-auth');
+const { ApolloServer } = require('apollo-server-express');
+const { typeDefs, resolvers } = require('./src/graphql/schema');
+const { db } = require('./src/dataBase/database');
+const { getUuidToken } = require('./src/middleware/firebase-auth');
 
 const app = express();
 
 app.use(cors());
+app.options('*', cors());
 app.use(express.json());
 
 app.use('/', indexRouter);
@@ -38,9 +30,7 @@ if (process.env.NODE_MODE !== 'test') {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({
-    req
-  }) => {
+  context: ({ req }) => {
     const token = req.header('Authorization') || '';
     const uuid = getUuidToken(token);
     return {
