@@ -2,6 +2,8 @@
 const Mongoose = require('mongoose');
 // To Avoid findAndModify is deprecated
 Mongoose.set('useFindAndModify', false);
+// To Avoid collection.ensureIndex is deprecated is deprecated
+Mongoose.set('useCreateIndex', true);
 
 /* **********************************************************************************************
  *
