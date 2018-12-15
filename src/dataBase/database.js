@@ -37,8 +37,6 @@ class DataBase {
       done
     );
 
-    console.log(`db hots ${this.dbUrl}/${this.dbName}`);
-
     this.db = Mongoose.connection;
 
     this.db.once('close', () => {

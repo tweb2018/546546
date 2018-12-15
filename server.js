@@ -16,7 +16,6 @@ const { getUuidToken } = require('./src/middleware/firebase-auth');
 const app = express();
 
 app.use(cors());
-app.options('*', cors());
 app.use(express.json());
 
 app.use('/', indexRouter);
