@@ -32,8 +32,11 @@ class BookService {
 
           resolve(results);
         } else {
-          console.log(error);
-          reject(error);
+          /* istanbul ignore next */
+          {
+            console.log(error);
+            reject(error);
+          }
         }
       });
     });
@@ -52,8 +55,11 @@ class BookService {
         }
       })
       .catch(error => {
-        console.log(error);
-        return error;
+        /* istanbul ignore next */
+        {
+          console.log(error);
+          return error;
+        }
       });
   }
 
@@ -64,8 +70,11 @@ class BookService {
         return result;
       })
       .catch(error => {
-        console.log(error);
-        return error;
+        /* istanbul ignore next */
+        {
+          console.log(error);
+          return error;
+        }
       });
   }
 

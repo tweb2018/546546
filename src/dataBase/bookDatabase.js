@@ -1,12 +1,8 @@
 const Book = require('../models/books');
 const tools = require('../utils/tools');
-const {
-  DataBase
-} = require('./database');
+const { DataBase } = require('./database');
 
-// change this value if you want more or less time in cache
-const TIME_IN_CACHE = 5;
-const CACHE_TIME = process.env.NODE_MODE === 'test' ? 5 : TIME_IN_CACHE;
+const CACHE_TIME = parseInt(process.env.CACHE_TIME);
 
 /* **********************************************************************************************
  *
@@ -33,11 +29,11 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  insertBook(book, done) {
+  insertBook(book) {
     // Custom save or update
     return Book.findOne({
-        id: book.id
-      })
+      id: book.id
+    })
       .then(findBook => {
         if (findBook === null) {
           const dbBook = new Book({
@@ -50,16 +46,16 @@ class BookDatabase extends DataBase {
             thumbnail: book.thumbnail
           });
 
-          return this.saveInDB(dbBook, done);
+          return this.saveInDB(dbBook);
+        } else if (tools.delay(findBook.cache_timestamp) > CACHE_TIME) {
+          findBook.cache_timestamp = new Date();
+          return this.updateBook(findBook);
         } else {
-          if (tools.delay(findBook.cache_timestamp) > CACHE_TIME) {
-            findBook.cache_timestamp = new Date();
-            return this.updateBook(findBook, done);
-          }
+          return findBook;
         }
       })
       .catch(error => {
-        if (typeof done === 'function') done();
+        /* istanbul ignore next */
         console.log(error);
       });
   }
@@ -73,15 +69,14 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  getBooks(text, limit, done) {
+  getBooks(text, limit) {
     return Book.search(text)
       .limit(limit)
       .then(results => {
-        if (typeof done === 'function') done();
         return results;
       })
       .catch(error => {
-        if (typeof done === 'function') done();
+        /* istanbul ignore next */
         console.log(error);
       });
   }
@@ -95,16 +90,15 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  getBook(id, done) {
+  getBook(id) {
     return Book.findOne({
-        id: id
-      })
+      id: id
+    })
       .then(result => {
-        if (typeof done === 'function') done();
         return result;
       })
       .catch(error => {
-        if (typeof done === 'function') done();
+        /* istanbul ignore next */
         console.log(error);
       });
   }
@@ -117,9 +111,9 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  insertBooks(books, done) {
+  /* istanbul ignore next */
+  insertBooks(books) {
     books.map(book => this.insertBook(book));
-    if (typeof done === 'function') done();
   }
 
   /* *************************************************************
@@ -131,18 +125,22 @@ class BookDatabase extends DataBase {
    * @description Update a book
    *
    ************************************************************ */
-  updateBook(book, done) {
-    return Book.findOneAndUpdate({
+  updateBook(book) {
+    return Book.findOneAndUpdate(
+      {
         id: book.id
-      }, book, {
-        runValidators: true
-      })
+      },
+      book,
+      {
+        runValidators: true,
+        new: true
+      }
+    )
       .then(result => {
-        if (typeof done === 'function') done();
         return result;
       })
       .catch(error => {
-        if (typeof done === 'function') done();
+        /* istanbul ignore next */
         console.log(error);
       });
   }
