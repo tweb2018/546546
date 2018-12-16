@@ -66,6 +66,25 @@ describe('bookService.test.js', function() {
           bookService
             .getBooks('The lord of the rings', limit)
             .then(secondResults => {
+              // Sort to be sure to compare the same book
+              results.sort(function(a, b) {
+                if (a.title < b.title) {
+                  return -1;
+                }
+                if (a.title > b.title) {
+                  return 1;
+                }
+                return 0;
+              });
+              secondResults.sort(function(a, b) {
+                if (a.title < b.title) {
+                  return -1;
+                }
+                if (a.title > b.title) {
+                  return 1;
+                }
+                return 0;
+              });
               secondResults.map((book, i) => {
                 expect(book.id.id.toString()).to.be.deep.equal(results[i].id);
                 expect(book.title).to.be.deep.equal(results[i].title);
