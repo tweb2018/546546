@@ -11,7 +11,7 @@ const serviceAccount = {
   token_uri: process.env.FIREBASE_TOKEN_URL,
   auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_x509_CERT_URL,
   client_x509_cert_url: process.env.FIREBASE_CLIENT_x509_CERT_URL
-}
+};
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
@@ -49,6 +49,7 @@ getUuidToken = authToken => {
       .auth()
       .verifyIdToken(authToken)
       .then(decodedToken => {
+        console.log('dans getUuidToken()');
         return decodedToken.uid;
         //next ou pas next
         next();

@@ -30,7 +30,8 @@ class DataBase {
   // initialize db connection
   connect(done) {
     Mongoose.connect(
-      `${this.dbUrl}/${this.dbName}`, {
+      `${this.dbUrl}/${this.dbName}`,
+      {
         useNewUrlParser: true
       },
       done
