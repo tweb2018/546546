@@ -84,9 +84,9 @@ exemple:
 
 ## Responses
 
-The endpoint return you a Json table with multiple information about 'books, users and comments'.
+The endpoint return you a Json table with multiple information about `books, users and comments`.
 
-Exemple of Json response:
+Exemple of Json response
 
 ```{javascript}
   Book {
@@ -129,19 +129,20 @@ A simple way to deploy this app is using Heroku.
 3. Create a new app in heroku admin panel and link it to your github repo (forked)
 4. Go into the app setting into heroku. From here you need to set the env variables for your heroku app.
 5. You need to add one by one those env. variables with your personal token (you can use .env.zip file info)
-
-Exemple :
-
-[http://image.noelshack.com/fichiers/2018/43/7/1540740419-capture.png](http://image.noelshack.com/fichiers/2018/43/7/1540740419-capture.png)
-
-7. You can now enable the automatic deploy or deploy the app manualy.
-8. Go to your app website and check the app with a user.
+6. You can now enable the automatic deploy or deploy the app manualy.
+7. Go to your app website and check the app with a user.
 
 Info: To deploy the app in production, you need to have also a prod mongoDB. For this you can use Mlab
+
+### Debugging
+
+Select the launcher `Launch Program` to debbug
 
 ## Tests
 
 The tests used mocha
+
+You need to start the mongdb server to launch tests
 
 To run tests use the following command
 
@@ -154,3 +155,7 @@ Set on the `.env` file properties
 - `CACHE_TIME` : `1`
 
 - `NODE_MODE` : `test`
+
+### Debugging
+
+Select the launcher `Mocha All files to debug tests` to debug

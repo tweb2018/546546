@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 mongoose.plugin(require('mongoose-regex-search'));
 
-const schema = new Schema({
+const schema = new Schema(
+  {
     id: {
       type: mongoose.Schema.Types.ObjectId,
       searchable: false,

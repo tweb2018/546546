@@ -1,15 +1,15 @@
 if (process.env.NODE_MODE !== 'production') {
   /* eslint-disable global-require */
-  require('dotenv').config({ path: `${__dirname}/../../.env` });
+  require('dotenv').config({
+    path: `${__dirname}/../../.env`
+  });
   /* eslint-enable global-require */
 }
 
 const chai = require('chai');
 const dirtyChai = require('dirty-chai');
 const bookDatabase = require('../../src/dataBase/bookDatabase');
-const book = require('./bookModel');
-const tools = require('../../src/utils/tools');
-
+const { book } = require('./models');
 const { expect } = chai;
 const CACHE_TIME = parseInt(process.env.CACHE_TIME);
 
@@ -88,8 +88,8 @@ describe('bookDatabase.test.js', function() {
         .insertBook(book)
         .then(result => {
           expect(result).to.not.be.undefined();
-          expect(tools.delay(result.cache_timestamp)).to.be.lessThan(
-            tools.delay(book.cache_timestamp)
+          expect(result.cache_timestamp).to.be.greaterThan(
+            book.cache_timestamp
           );
           book.cache_timestamp = result.cache_timestamp;
           done();
@@ -105,9 +105,7 @@ describe('bookDatabase.test.js', function() {
       .insertBook(book)
       .then(result => {
         expect(result).to.not.be.undefined();
-        expect(tools.delay(result.cache_timestamp)).to.be.deep.equal(
-          tools.delay(book.cache_timestamp)
-        );
+        expect(result.cache_timestamp).to.be.deep.equal(book.cache_timestamp);
         done();
       })
       .catch(err => {

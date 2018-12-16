@@ -14,16 +14,6 @@
   "eslintConfig": {
     "extends": "airbnb-base"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "git add"
-    ]
-  },
   "author": "Michaël Brouchoud, Thomas Léchaire & Patrick Neto",
   "license": "ISC",
   "dependencies": {
@@ -62,7 +52,6 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",

@@ -40,7 +40,9 @@ describe('server.test.js', function() {
       .post(register)
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
-      .send({ password: '1' })
+      .send({
+        password: '1'
+      })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });

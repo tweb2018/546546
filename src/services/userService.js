@@ -14,7 +14,8 @@ class UserService {
   }
 
   insertUser(user) {
-    return userDataBase.insertUser(user)
+    return userDataBase
+      .insertUser(user)
       .then(result => {
         return result;
       })

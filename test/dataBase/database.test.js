@@ -1,6 +1,8 @@
 if (process.env.NODE_MODE !== 'production') {
   /* eslint-disable global-require */
-  require('dotenv').config({ path: `${__dirname}/../../.env` });
+  require('dotenv').config({
+    path: `${__dirname}/../../.env`
+  });
   /* eslint-enable global-require */
 }
 
@@ -8,7 +10,7 @@ const chai = require('chai');
 const dirtyChai = require('dirty-chai');
 const { expect } = chai;
 const { DataBase } = require('../../src/dataBase/database');
-const book = require('./bookModel');
+const { book } = require('./models');
 const Book = require('../../src/models/books');
 
 chai.use(dirtyChai);
