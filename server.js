@@ -18,9 +18,10 @@ const route = require('./src/routes/route');
 
 const app = express();
 
+const port = process.env.PORT;
+
 app.use(cors());
 app.use(express.json());
-
 app.use(route.api, auth);
 
 /* istanbul ignore if  */
@@ -43,11 +44,8 @@ if (process.env.NODE_MODE !== 'test') {
     app,
     path: route.graphql
   });
-}
 
-const port = process.env.PORT;
-/* istanbul ignore if  */
-if (process.env.NODE_MODE !== 'test') {
+  /* istanbul ignore if  */
   app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
   });

@@ -1,5 +1,5 @@
 const route = {
-  graphql: 'graphql',
+  graphql: '/graphql',
   api: '/api',
   register: '/register',
   login: '/login',
