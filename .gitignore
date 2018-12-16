@@ -4,3 +4,7 @@ node_modules/
 .env
 
 src/utils/bookbook-c5c5c-firebase-adminsdk-dt3of-a0310f75a5\.json
+
+\.nyc_output/
+
+coverage/

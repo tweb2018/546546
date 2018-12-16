@@ -141,12 +141,16 @@ Info: To deploy the app in production, you need to have also a prod mongoDB. For
 
 ## Tests
 
-TODO
+The tests used mocha
 
 To run tests use the following command
 
 ```{shell}
-npm run test
+npm test
 ```
 
-The tests used mocha
+Set on the `.env` file properties
+
+- `CACHE_TIME` : `1`
+
+- `NODE_MODE` : `test`

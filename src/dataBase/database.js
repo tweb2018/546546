@@ -62,7 +62,7 @@ class DataBase {
    *
    ************************************************************ */
   close(done) {
-    this.db.close(done);
+    return this.db.close(done);
   }
 
   /* *************************************************************
@@ -72,7 +72,7 @@ class DataBase {
    *
    ************************************************************ */
   clear(done) {
-    this.db.dropDatabase(done);
+    return this.db.dropDatabase(done);
   }
 
   /* *************************************************************
@@ -87,16 +87,21 @@ class DataBase {
     return value
       .save()
       .then(result => {
+        if (typeof done === 'function') done();
         return result;
       })
       .catch(error => {
-        console.log(error);
-        if (typeof done === 'function') done();
+        // Difficult to test
+        /* istanbul ignore next */
+        {
+          console.log(error);
+          if (typeof done === 'function') done();
+        }
       });
   }
 }
 
-const db = new DataBase();
+const db = new DataBase({});
 
 module.exports = {
   db,

@@ -1,6 +1,4 @@
-const {
-  gql
-} = require('apollo-server-express');
+const { gql } = require('apollo-server-express');
 const {
   GraphQLEmail,
   GraphQLURL,
@@ -13,7 +11,7 @@ const {
 const bookService = require('../services/bookService');
 const userService = require('../services/userService');
 
-const typeDefs = gql `
+const typeDefs = gql`
   scalar URL
   scalar Email
   scalar DateTime
@@ -42,7 +40,7 @@ const typeDefs = gql `
 
   # TODO => Patrick
   type Comment {
-    id:ID!
+    id: ID!
   }
 
   type Query {

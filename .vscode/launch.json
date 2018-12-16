@@ -9,6 +9,21 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}\\server.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Mocha All Files",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/**/*.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }

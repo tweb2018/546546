@@ -1,14 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "book social network",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/tweb2018/Backend_BookBook"
+    "url": "https://github.com/tweb2018/Backend_BookBook"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc --reporter=text --reporter=html mocha --recursive",
     "start": "nodemon server.js"
   },
   "eslintConfig": {
@@ -24,7 +24,7 @@
       "git add"
     ]
   },
-  "author": "",
+  "author": "Michaël Brouchoud, Thomas Léchaire & Patrick Neto",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.2.6",
@@ -55,12 +55,20 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
+    "assert": "^1.4.1",
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
-    "prettier": "^1.15.3"
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "prettier": "^1.15.3",
+    "sinon": "^7.2.2",
+    "sinon-chai": "^3.3.0",
+    "supertest": "^3.3.0"
   }
 }
