@@ -21,22 +21,26 @@ describe('database.test.js', function() {
   let db;
 
   describe('Create Database', () => {
-    it('Can create database', done => {
+    it('Can create database', () => {
       db = new DataBase({});
       expect(db).to.not.be.undefined();
-      done();
     });
   });
 
   describe('Connect Database', () => {
     it('Can connect to database', done => {
-      db.connect();
+      db.connect(done);
+    });
+  });
+
+  describe('Clear Database', () => {
+    it('Can clear to database', done => {
       db.clear(done);
     });
   });
 
   describe('Save data to Database', () => {
-    it('Can save data to Database', done => {
+    it('Can save data to Database', async () => {
       const dbBook = new Book({
         id: book.id,
         cache_timestamp: book.cache_timestamp,
@@ -47,16 +51,10 @@ describe('database.test.js', function() {
         thumbnail: book.thumbnail
       });
 
-      db.saveInDB(dbBook)
-        .then(result => {
-          expect(result).to.not.be.undefined();
-          expect(result.id).to.be.equal(book.id);
-          expect(result.title).to.be.deep.equal(book.title);
-          done();
-        })
-        .catch(err => {
-          done(new Error(err));
-        });
+      const result = await db.saveInDB(dbBook);
+      expect(result).to.not.be.undefined();
+      expect(result.id).to.be.equal(book.id);
+      expect(result.title).to.be.deep.equal(book.title);
     });
   });
 

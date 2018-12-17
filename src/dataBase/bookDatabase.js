@@ -31,56 +31,42 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  insertBook(book) {
+  async insertBook(book) {
     // Custom save or update
-    return Book.findOne({
+    const findBook = await Book.findOne({
       id: book.id
-    })
-      .then(findBook => {
-        if (findBook === null) {
-          const dbBook = new Book({
-            id: mongoose.Types.ObjectId(book.id),
-            cache_timestamp: book.cache_timestamp,
-            authors: book.authors,
-            title: book.title,
-            summary: book.summary,
-            published_date: book.published_date,
-            thumbnail: book.thumbnail
-          });
+    });
 
-          return this.saveInDB(dbBook);
-        } else if (tools.delay(findBook.cache_timestamp) > CACHE_TIME) {
-          findBook.cache_timestamp = new Date();
-          return this.updateBook(findBook);
-        } else {
-          return findBook;
-        }
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        console.log(error);
+    if (findBook === null) {
+      const dbBook = new Book({
+        id: mongoose.Types.ObjectId(book.id),
+        cache_timestamp: book.cache_timestamp,
+        authors: book.authors,
+        title: book.title,
+        summary: book.summary,
+        published_date: book.published_date,
+        thumbnail: book.thumbnail
       });
+      return this.saveInDB(dbBook);
+    } else if (tools.delay(findBook.cache_timestamp) > CACHE_TIME) {
+      findBook.cache_timestamp = new Date();
+      return this.updateBook(findBook);
+    } else {
+      return findBook;
+    }
   }
 
   /* *************************************************************
    *
    * @function getBooks(title, done)
    * @param id The book's title to fetch
-   * @param done Use only this for testing callback
    * @return A Promise which you can catch the books with a then()
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  getBooks(text, limit) {
-    return Book.search(text)
-      .limit(limit)
-      .then(results => {
-        return results.map(result => (result = this.createResultBook(result)));
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        console.log(error);
-      });
+  async getBooks(text, limit) {
+    const results = await Book.search(text).limit(limit);
+    return results.map(result => (result = this.createResultBook(result)));
   }
 
   /* *************************************************************
@@ -92,17 +78,11 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  getBook(id) {
-    return Book.findOne({
+  async getBook(id) {
+    const result = await Book.findOne({
       id: id
-    })
-      .then(result => {
-        return this.createResultBook(result);
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        console.log(error);
-      });
+    });
+    return this.createResultBook(result);
   }
 
   /* *************************************************************
@@ -120,7 +100,7 @@ class BookDatabase extends DataBase {
 
   createResultBook(dbBook) {
     const book = {
-      id: bookDatabase.revertId(dbBook.id.id),
+      id: this.revertId(dbBook.id.id),
       cache_timestamp: dbBook.cache_timestamp,
       authors: dbBook.authors,
       title: dbBook.title,
@@ -141,8 +121,8 @@ class BookDatabase extends DataBase {
    * @description Update a book
    *
    ************************************************************ */
-  updateBook(book) {
-    return Book.findOneAndUpdate(
+  async updateBook(book) {
+    const result = await Book.findOneAndUpdate(
       {
         id: book.id
       },
@@ -151,14 +131,8 @@ class BookDatabase extends DataBase {
         runValidators: true,
         new: true
       }
-    )
-      .then(result => {
-        return this.createResultBook(result);
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        console.log(error);
-      });
+    );
+    return this.createResultBook(result);
   }
 }
 

@@ -34,7 +34,7 @@ isAuthenticated = (req, res, next) => {
         next();
       })
       .catch(err => {
-        console.log("Erreur d'authentification");
+        console.log('Erreur d`authentification');
         res.sendStatus(401);
       });
   } else {

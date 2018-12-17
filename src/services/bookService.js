@@ -41,40 +41,19 @@ class BookService {
     });
   }
 
-  getBooks(text, limit) {
-    return bookDatabase
-      .getBooks(text, limit)
-      .then(results => {
-        if (results.length === 0) {
-          return this.searchOnline(text, limit);
-        } else {
-          // to refresh data but no need to wait
-          this.searchOnline(text, limit);
-          return results;
-        }
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        {
-          console.log(error);
-          return error;
-        }
-      });
+  async getBooks(text, limit) {
+    const results = await bookDatabase.getBooks(text, limit);
+    if (results.length === 0) {
+      return await this.searchOnline(text, limit);
+    } else {
+      // to refresh data but no need to wait
+      this.searchOnline(text, limit);
+      return results;
+    }
   }
 
-  getBook(id) {
-    return bookDatabase
-      .getBook(id)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        /* istanbul ignore next */
-        {
-          console.log(error);
-          return error;
-        }
-      });
+  async getBook(id) {
+    return await bookDatabase.getBook(id);
   }
 
   // retrive all comments

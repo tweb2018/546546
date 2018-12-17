@@ -105,12 +105,12 @@ const resolvers = {
   },
   Book: {
     comments: (parent, args, context, info) => {
-      return [];
+      return []; // TODO => Patrick
     }
   },
   User: {
     comments: (parent, args, context, info) => {
-      return [];
+      return []; // TODO => Patrick
     }
   },
 

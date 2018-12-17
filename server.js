@@ -49,7 +49,6 @@ if (process.env.NODE_MODE !== 'test') {
     path: route.graphql
   });
 
-  /* istanbul ignore if  */
   app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
   });

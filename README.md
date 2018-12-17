@@ -142,6 +142,8 @@ Select the launcher `Launch Program` to debbug
 
 The tests used mocha
 
+You need web connection to run tests
+
 You need to start the mongdb server to launch tests
 
 To run tests use the following command

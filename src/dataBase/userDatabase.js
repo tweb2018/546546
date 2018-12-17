@@ -39,27 +39,33 @@ class UserDatabase extends DataBase {
     return this.saveInDB(dbUser, done);
   }
 
+  createResultUser(dbUser) {
+    const user = {
+      id: this.revertId(dbUser.id.id),
+      login: dbUser.login,
+      first_name: dbUser.first_name,
+      last_name: dbUser.last_name,
+      email: dbUser.email,
+      avatar: dbUser.avatar,
+      comments: dbUser.comments
+    };
+
+    return user;
+  }
+
   /* *************************************************************
    *
-   * @function getUser(id, done)
+   * @function getUser(id)
    * @param id The user's id to fetch
-   * @param done Use only this for testing callback
    * @return A Promise which you can catch the user with a then()
    * @description construction and insertion of a user in DB
    *
    ************************************************************ */
-  getUser(id, done) {
-    return User.findOne({
+  async getUser(id) {
+    const result = await User.findOne({
       id
-    })
-      .then(result => {
-        if (typeof done === 'function') done();
-        return result;
-      })
-      .catch(error => {
-        if (typeof done === 'function') done();
-        console.log(error);
-      });
+    });
+    return this.createResultUser(result);
   }
 
   /* *************************************************************
@@ -71,8 +77,8 @@ class UserDatabase extends DataBase {
    * @description Update a user
    *
    ************************************************************ */
-  updateUser(user, done) {
-    return Book.findOneAndUpdate(
+  async updateUser(user) {
+    const result = await Book.findOneAndUpdate(
       {
         id: user.id
       },
@@ -80,15 +86,8 @@ class UserDatabase extends DataBase {
       {
         runValidators: true
       }
-    )
-      .then(result => {
-        if (typeof done === 'function') done();
-        return result;
-      })
-      .catch(error => {
-        if (typeof done === 'function') done();
-        console.log(error);
-      });
+    );
+    return this.createResultUser(result);
   }
 }
 

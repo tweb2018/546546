@@ -1,43 +1,19 @@
 const userDataBase = require('../dataBase/userDatabase');
 
 class UserService {
-  getUser(id) {
-    return userDataBase
-      .getUser(id)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        console.log(error);
-        return error;
-      });
+  async getUser(id) {
+    return await userDataBase.getUser(id);
   }
 
-  insertUser(user) {
-    return userDataBase
-      .insertUser(user)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        console.log(error);
-        return error;
-      });
+  async insertUser(user) {
+    return await userDataBase.insertUser(user);
   }
 
-  updateUser(user) {
-    return bookDatabase
-      .updateUser(user)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        console.log(error);
-        return error;
-      });
+  async updateUser(user) {
+    return await userDataBase.updateUser(user);
   }
 
-  userComments(userId) {
+  async userComments(userId) {
     // TODO => Patrick
   }
   /*  Optional */

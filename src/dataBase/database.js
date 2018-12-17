@@ -84,21 +84,8 @@ class DataBase {
    * @description save the value in DB
    *
    ***************************************************************** */
-  saveInDB(value, done) {
-    return value
-      .save()
-      .then(result => {
-        if (typeof done === 'function') done();
-        return result;
-      })
-      .catch(error => {
-        // Difficult to test
-        /* istanbul ignore next */
-        {
-          console.log(error);
-          if (typeof done === 'function') done();
-        }
-      });
+  async saveInDB(value) {
+    return await value.save();
   }
 
   revertId(id) {
