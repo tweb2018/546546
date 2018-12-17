@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const googleBooks = require('google-books-search');
 const bookDatabase = require('../dataBase/bookDatabase');
 
@@ -19,7 +18,7 @@ class BookService {
       googleBooks.search(text, options, (error, results) => {
         if (error === null) {
           const searchResult = results.map(book => ({
-            id: mongoose.Types.ObjectId(book.id),
+            id: book.id,
             cache_timestamp: new Date(),
             authors: book.authors,
             title: book.title,

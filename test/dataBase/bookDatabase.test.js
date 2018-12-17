@@ -58,7 +58,7 @@ describe('bookDatabase.test.js', function() {
       .getBook(book.id)
       .then(result => {
         expect(result).to.not.be.undefined();
-        expect(result.id.id.toString()).to.be.equal(book.id.id);
+        expect(result.id).to.be.equal(book.id.id);
         expect(result.title).to.be.deep.equal(book.title);
         done();
       })
@@ -73,7 +73,7 @@ describe('bookDatabase.test.js', function() {
       .updateBook(book)
       .then(result => {
         expect(result).to.not.be.undefined();
-        expect(result.id.id.toString()).to.be.equal(book.id.id);
+        expect(result.id).to.be.equal(book.id.id);
         expect(result.title).to.be.deep.equal(book.title);
         done();
       })

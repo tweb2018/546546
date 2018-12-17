@@ -23,7 +23,10 @@ describe('bookService.test.js', function() {
   const limit = 5;
 
   before(done => {
-    bookDatabase.connect();
+    bookDatabase.connect(done);
+  });
+
+  beforeEach(done => {
     bookDatabase.clear(done);
   });
 
@@ -86,7 +89,7 @@ describe('bookService.test.js', function() {
                 return 0;
               });
               secondResults.map((book, i) => {
-                expect(book.id.id.toString()).to.be.deep.equal(results[i].id);
+                expect(book.id).to.be.deep.equal(results[i].id);
                 expect(book.title).to.be.deep.equal(results[i].title);
               });
 
@@ -112,7 +115,7 @@ describe('bookService.test.js', function() {
         bookService
           .getBook(book.id)
           .then(secondResults => {
-            expect(secondResults.id.id.toString()).to.be.deep.equal(book.id);
+            expect(secondResults.id).to.be.deep.equal(book.id);
             expect(secondResults.title).to.be.deep.equal(book.title);
             bookDatabase.clear(done);
           })

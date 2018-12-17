@@ -1,6 +1,7 @@
 const Book = require('../models/books');
 const tools = require('../utils/tools');
 const { DataBase } = require('./database');
+const mongoose = require('mongoose');
 
 const CACHE_TIME = parseInt(process.env.CACHE_TIME);
 
@@ -18,6 +19,7 @@ class BookDatabase extends DataBase {
     this.updateBook = this.updateBook.bind(this);
     this.getBook = this.getBook.bind(this);
     this.getBooks = this.getBooks.bind(this);
+    this.createResultBook = this.createResultBook.bind(this);
   }
 
   /* *************************************************************
@@ -37,7 +39,7 @@ class BookDatabase extends DataBase {
       .then(findBook => {
         if (findBook === null) {
           const dbBook = new Book({
-            id: book.id,
+            id: mongoose.Types.ObjectId(book.id),
             cache_timestamp: book.cache_timestamp,
             authors: book.authors,
             title: book.title,
@@ -73,7 +75,7 @@ class BookDatabase extends DataBase {
     return Book.search(text)
       .limit(limit)
       .then(results => {
-        return results;
+        return results.map(result => (result = this.createResultBook(result)));
       })
       .catch(error => {
         /* istanbul ignore next */
@@ -95,7 +97,7 @@ class BookDatabase extends DataBase {
       id: id
     })
       .then(result => {
-        return result;
+        return this.createResultBook(result);
       })
       .catch(error => {
         /* istanbul ignore next */
@@ -114,6 +116,20 @@ class BookDatabase extends DataBase {
   /* istanbul ignore next */
   insertBooks(books) {
     books.map(book => this.insertBook(book));
+  }
+
+  createResultBook(dbBook) {
+    const book = {
+      id: bookDatabase.revertId(dbBook.id.id),
+      cache_timestamp: dbBook.cache_timestamp,
+      authors: dbBook.authors,
+      title: dbBook.title,
+      summary: dbBook.summary,
+      published_date: dbBook.published_date,
+      thumbnail: dbBook.thumbnail
+    };
+
+    return book;
   }
 
   /* *************************************************************
@@ -137,7 +153,7 @@ class BookDatabase extends DataBase {
       }
     )
       .then(result => {
-        return result;
+        return this.createResultBook(result);
       })
       .catch(error => {
         /* istanbul ignore next */

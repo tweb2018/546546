@@ -45,6 +45,7 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
+    "apollo-server-testing": "^2.3.1",
     "assert": "^1.4.1",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1",
@@ -52,6 +53,7 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "graphql-tag": "^2.10.0",
     "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",

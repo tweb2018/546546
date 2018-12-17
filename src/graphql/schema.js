@@ -103,6 +103,16 @@ const resolvers = {
       }
     }
   },
+  Book: {
+    comments: (parent, args, context, info) => {
+      return [];
+    }
+  },
+  User: {
+    comments: (parent, args, context, info) => {
+      return [];
+    }
+  },
 
   Mutation: {
     insertUser: (_, { data }) => {

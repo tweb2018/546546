@@ -1,9 +1,9 @@
 // const Schema = require('./src/User.js');
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 // To Avoid findAndModify is deprecated
-Mongoose.set('useFindAndModify', false);
+mongoose.set('useFindAndModify', false);
 // To Avoid collection.ensureIndex is deprecated is deprecated
-Mongoose.set('useCreateIndex', true);
+mongoose.set('useCreateIndex', true);
 
 /* **********************************************************************************************
  *
@@ -27,11 +27,12 @@ class DataBase {
     this.close = this.close.bind(this);
     this.clear = this.clear.bind(this);
     this.saveInDB = this.saveInDB.bind(this);
+    this.revertId = this.revertId.bind(this);
   }
 
   // initialize db connection
   connect(done) {
-    Mongoose.connect(
+    mongoose.connect(
       `${this.dbUrl}/${this.dbName}`,
       {
         useNewUrlParser: true
@@ -39,7 +40,7 @@ class DataBase {
       done
     );
 
-    this.db = Mongoose.connection;
+    this.db = mongoose.connection;
 
     this.db.once('close', () => {
       console.log('Disconnected from DB');
@@ -62,7 +63,7 @@ class DataBase {
    *
    ************************************************************ */
   close(done) {
-    return this.db.close(done);
+    this.db.close(done);
   }
 
   /* *************************************************************
@@ -72,7 +73,7 @@ class DataBase {
    *
    ************************************************************ */
   clear(done) {
-    return this.db.dropDatabase(done);
+    this.db.dropDatabase(done);
   }
 
   /* *************************************************************
@@ -98,6 +99,10 @@ class DataBase {
           if (typeof done === 'function') done();
         }
       });
+  }
+
+  revertId(id) {
+    return id.toString('utf8');
   }
 }
 
