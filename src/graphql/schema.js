@@ -41,12 +41,26 @@ const typeDefs = gql`
   # TODO => Patrick
   type Comment {
     id: ID!
+    login: String
+    text: String
   }
 
   type Query {
     books(text: String, limit: Int): [Book]
     book(id: String!): Book
     profile: User
+  }
+
+  input UserInput {
+    id: ID
+    login: String
+    first_name: String
+    last_name: String
+    email: Email
+  }
+
+  type Mutation {
+    insertUser(data: UserInput!): User
   }
 `;
 
@@ -78,12 +92,30 @@ const resolvers = {
     },
 
     profile: (parent, args, context, info) => {
-      if (!context.uuid) {
-        //User === null donc non authentifié
+      if (context.uuid === null) {
+        console.log('uuid is null');
         return null;
       } else {
-        return userService.getUser(context.uuid);
+        console.log('Uuid from profile: ', context.uuid);
+        const user = userService.getUser(context.uuid);
+        console.log('User name: ', user.email);
+        return user;
       }
+    }
+  },
+
+  Mutation: {
+    insertUser: (_, { data }) => {
+      const user = {
+        id: data.id,
+        login: data.login,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email
+      };
+      userService.insertUser(user);
+      console.log(`User ${user.email} was inserted in dataBase`);
+      return user;
     }
   }
 };

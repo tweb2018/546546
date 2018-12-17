@@ -23,6 +23,7 @@ isAuthenticated = (req, res, next) => {
   // check if user is logged in
   // if they are not send and unathorized response
   const authorization = req.header('Authorization');
+  console.log('authorization: ', authorization);
   if (authorization) {
     firebaseAdmin
       .auth()
@@ -33,7 +34,7 @@ isAuthenticated = (req, res, next) => {
         next();
       })
       .catch(err => {
-        console.log(err);
+        console.log("Erreur d'authentification");
         res.sendStatus(401);
       });
   } else {
@@ -44,22 +45,17 @@ isAuthenticated = (req, res, next) => {
 
 // return user if exist
 getUuidToken = authToken => {
-  if (!authToken) {
-    firebaseAdmin
+  if (authToken !== null) {
+    return firebaseAdmin
       .auth()
       .verifyIdToken(authToken)
       .then(decodedToken => {
-        console.log('dans getUuidToken()');
+        console.log('decode Token: ', decodedToken.uid);
         return decodedToken.uid;
-        //next ou pas next
-        next();
       })
       .catch(err => {
         console.log(err);
       });
-  } else {
-    //no user found
-    next();
   }
 };
 

@@ -31,12 +31,16 @@ if (process.env.NODE_MODE !== 'test') {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-      const token = req.header('Authorization') || '';
-      const uuid = getUuidToken(token);
-      return {
-        uuid
-      };
+    context: async ({ req }) => {
+      const token = req.headers.authorization || '';
+      //console.log('jwt-token recieved: ', token);
+      const uuid = await getUuidToken(token).then(uuid => {
+        return uuid;
+      });
+      console.log('Uuid after: ', uuid);
+
+      // TODO uuid is not passed to context.
+      return uuid;
     }
   });
 
