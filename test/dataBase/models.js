@@ -5,8 +5,7 @@ const book = {
   title: 'book_title',
   summary: 'book_description',
   published_date: new Date(),
-  thumbnail: 'book_thumbnail',
-  comments: []
+  thumbnail: 'book_thumbnail'
 };
 
 const user = {
@@ -15,8 +14,7 @@ const user = {
   first_name: 'user_first_name',
   last_name: 'user_last_name',
   email: 'user_email',
-  avatar: 'user_avatar',
-  comments: []
+  avatar: 'user_avatar'
 };
 
 const comment = {
@@ -26,7 +24,8 @@ const comment = {
 
 const bookStars = {
   bookId: book.id,
-  userId: user.id
+  userId: user.id,
+  note: 5.5
 };
 
 module.exports = {

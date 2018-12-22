@@ -12,12 +12,10 @@ const bookService = require('../../src/services/bookService');
 const chai = require('chai');
 const dirtyChai = require('dirty-chai');
 const { expect } = chai;
-const testTools = require('../utils/test-tools');
+const testTools = require('../utils/testTools');
 
 chai.use(dirtyChai);
 
-// Do not chanche test order !!!!
-// Test order is very important !!!
 describe('bookService.test.js', function() {
   this.timeout(10000);
 
@@ -25,14 +23,15 @@ describe('bookService.test.js', function() {
 
   before(async () => {
     await bookDatabase.connect();
-  });
-
-  beforeEach(async () => {
     await bookDatabase.clear();
   });
 
   after(async () => {
     await bookDatabase.close();
+  });
+
+  afterEach(async () => {
+    await bookDatabase.clear();
   });
 
   it('Can search book', async () => {
@@ -51,9 +50,6 @@ describe('bookService.test.js', function() {
   it('Can get books from cache', async () => {
     const results = await bookService.getBooks('The lord of the rings', limit);
     expect(results.length).to.be.deep.equal(limit);
-
-    //Wait data insertion
-    await testTools.sleep(500);
 
     const secondResults = await bookService.getBooks(
       'The lord of the rings',
@@ -91,9 +87,6 @@ describe('bookService.test.js', function() {
     );
     expect(results.length).to.be.deep.equal(limit);
     const book = results[0];
-
-    //Wait data insertion
-    await testTools.sleep(500);
 
     const secondResults = await bookService.getBook(book.id);
     expect(secondResults).to.not.be.null();

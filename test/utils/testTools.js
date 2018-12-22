@@ -6,6 +6,11 @@ class TestTools {
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  deleteMongooseId(data) {
+    const { _id, ...doc } = data.toJSON();
+    return doc;
+  }
 }
 
 const testTools = new TestTools({});

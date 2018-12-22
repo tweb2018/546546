@@ -91,8 +91,10 @@ class BookDatabase extends DataBase {
    *
    ************************************************************ */
   /* istanbul ignore next */
-  insertBooks(books) {
-    books.map(book => this.insertBook(book));
+  async insertBooks(books) {
+    return await Promise.all(
+      books.map(async book => await this.insertBook(book))
+    );
   }
 
   /* *************************************************************

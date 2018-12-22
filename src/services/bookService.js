@@ -6,6 +6,19 @@ class BookService {
     this.getBook = this.getBook.bind(this);
     this.getBooks = this.getBooks.bind(this);
     this.searchOnline = this.searchOnline.bind(this);
+    this.createBook = this.createBook.bind(this);
+  }
+
+  createBook(id, authors, title, summary, published_date, thumbnail) {
+    return {
+      id: id,
+      cache_timestamp: new Date(),
+      authors: authors,
+      title: title,
+      summary: summary || '',
+      published_date: published_date,
+      thumbnail: thumbnail
+    };
   }
 
   searchOnline(text, limit) {
@@ -15,19 +28,24 @@ class BookService {
     };
 
     return new Promise((resolve, reject) => {
-      googleBooks.search(text, options, (error, results) => {
+      googleBooks.search(text, options, async (error, results) => {
         if (error === null) {
-          const searchResult = results.map(book => ({
-            id: book.id,
-            cache_timestamp: new Date(),
-            authors: book.authors,
-            title: book.title,
-            summary: book.description || '',
-            published_date: book.publishedDate,
-            thumbnail: book.thumbnail
-          }));
+          const searchResult = results.map(book =>
+            this.createBook(
+              book.id,
+              book.authors,
+              book.title,
+              book.description || '',
+              book.publishedDate,
+              book.thumbnail
+            )
+          );
 
-          bookDatabase.insertBooks(searchResult);
+          if (process.env.NODE_MODE === 'test') {
+            await bookDatabase.insertBooks(searchResult);
+          } else {
+            bookDatabase.insertBooks(searchResult);
+          }
 
           resolve(results);
         } else {
@@ -47,7 +65,11 @@ class BookService {
       return await this.searchOnline(text, limit);
     } else {
       // to refresh data but no need to wait
-      this.searchOnline(text, limit);
+      if (process.env.NODE_MODE === 'test') {
+        await this.searchOnline(text, limit);
+      } else {
+        this.searchOnline(text, limit);
+      }
       return results;
     }
   }
