@@ -11,6 +11,7 @@ const {
 const bookService = require('../services/bookService');
 const userService = require('../services/userService');
 
+/* istanbul ignore next  */
 const typeDefs = gql`
   scalar URL
   scalar Email
@@ -41,8 +42,8 @@ const typeDefs = gql`
   # TODO => Patrick
   type Comment {
     id: ID!
-    login: String
-    text: String
+    bookId: String!
+    userId: String!
   }
 
   type Query {
@@ -73,6 +74,7 @@ context: an object shared by all resolvers in GraphQL operation
         use for authentication
 info: use this only in advanced cases.        
 */
+/* istanbul ignore next  */
 const resolvers = {
   URL: GraphQLURL,
   Email: GraphQLEmail,

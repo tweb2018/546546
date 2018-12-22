@@ -63,49 +63,45 @@ describe('graphql.test.js', function() {
 
   const limit = 5;
 
-  before(done => {
-    bookDatabase.connect(done);
+  before(async () => {
+    await bookDatabase.connect();
   });
 
-  beforeEach(done => {
-    bookDatabase.clear(done);
+  beforeEach(async () => {
+    await bookDatabase.clear();
   });
 
-  after(done => {
-    server.stop();
-    bookDatabase.close(done);
+  after(async () => {
+    await server.stop();
+    await bookDatabase.close();
   });
 
-  describe('Fetch book', () => {
-    it('Can fetch book', async () => {
-      const result = await bookDatabase.insertBook(book);
+  it('Can fetch book', async () => {
+    const result = await bookDatabase.insertBook(book);
 
-      const results = await query({
-        query: GET_BOOK,
-        variables: {
-          id: result.id
-        }
-      });
-
-      const dbBook = results.data.book;
-      expect(dbBook).to.not.be.undefined();
-      expect(dbBook.id).to.be.deep.equal(result.id.id);
-      expect(dbBook.title).to.be.deep.equal(result.title);
+    const results = await query({
+      query: GET_BOOK,
+      variables: {
+        id: result.id
+      }
     });
 
-    describe('Fetch books', () => {
-      it('Can fetch books', async () => {
-        const results = await query({
-          query: GET_BOOKS,
-          variables: {
-            title: 'Mama mia',
-            limit: limit
-          }
-        });
-        const { books } = results.data;
-        expect(books).to.not.be.undefined();
-        expect(books.length).to.be.deep.equal(limit);
-      });
+    const dbBook = results.data.book;
+    expect(dbBook).to.not.be.undefined();
+    expect(dbBook.id).to.be.deep.equal(result.id);
+    expect(dbBook.title).to.be.deep.equal(result.title);
+  });
+
+  it('Can fetch books', async () => {
+    const results = await query({
+      query: GET_BOOKS,
+      variables: {
+        title: 'Mama mia',
+        limit: limit
+      }
     });
+    const { books } = results.data;
+    expect(books).to.not.be.undefined();
+    expect(books.length).to.be.deep.equal(limit);
   });
 });

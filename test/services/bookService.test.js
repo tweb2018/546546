@@ -12,6 +12,7 @@ const bookService = require('../../src/services/bookService');
 const chai = require('chai');
 const dirtyChai = require('dirty-chai');
 const { expect } = chai;
+const testTools = require('../utils/test-tools');
 
 chai.use(dirtyChai);
 
@@ -22,16 +23,16 @@ describe('bookService.test.js', function() {
 
   const limit = 5;
 
-  before(done => {
-    bookDatabase.connect(done);
+  before(async () => {
+    await bookDatabase.connect();
   });
 
-  beforeEach(done => {
-    bookDatabase.clear(done);
+  beforeEach(async () => {
+    await bookDatabase.clear();
   });
 
-  after(done => {
-    bookDatabase.close(done);
+  after(async () => {
+    await bookDatabase.close();
   });
 
   it('Can search book', async () => {
@@ -39,6 +40,7 @@ describe('bookService.test.js', function() {
       'The lord of the rings',
       limit
     );
+    expect(results.length).to.be.deep.equal(limit);
   });
 
   it('Can get books from searchOnline', async () => {
@@ -51,38 +53,38 @@ describe('bookService.test.js', function() {
     expect(results.length).to.be.deep.equal(limit);
 
     //Wait data insertion
-    setTimeout(async () => {
-      const secondResults = await bookService.getBooks(
-        'The lord of the rings',
-        limit
-      );
-      // Sort to be sure to compare the same book
-      results.sort(function(a, b) {
-        if (a.title < b.title) {
-          return -1;
-        }
-        if (a.title > b.title) {
-          return 1;
-        }
-        return 0;
-      });
-      secondResults.sort(function(a, b) {
-        if (a.title < b.title) {
-          return -1;
-        }
-        if (a.title > b.title) {
-          return 1;
-        }
-        return 0;
-      });
-      secondResults.map((book, i) => {
-        expect(book.id).to.be.deep.equal(results[i].id);
-        expect(book.title).to.be.deep.equal(results[i].title);
-      });
-    }, 100);
+    await testTools.sleep(500);
+
+    const secondResults = await bookService.getBooks(
+      'The lord of the rings',
+      limit
+    );
+    // Sort to be sure to compare the same book
+    results.sort(function(a, b) {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+    secondResults.sort(function(a, b) {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+    secondResults.map((book, i) => {
+      expect(book.id).to.be.deep.equal(results[i].id);
+      expect(book.title).to.be.deep.equal(results[i].title);
+    });
   });
 
-  it('Can get books by id', async () => {
+  it('Can get book by id', async () => {
     const results = await bookService.searchOnline(
       'The lord of the rings',
       limit
@@ -91,14 +93,13 @@ describe('bookService.test.js', function() {
     const book = results[0];
 
     //Wait data insertion
-    setTimeout(async () => {
-      const secondResults = await bookService;
-      expect(secondResults.id).to.be.deep.equal(book.id);
-      expect(secondResults.title).to.be.deep.equal(book.title);
-    }, 100);
+    await testTools.sleep(500);
+
+    const secondResults = await bookService.getBook(book.id);
+    expect(secondResults).to.not.be.null();
+    expect(secondResults.id).to.be.deep.equal(book.id);
+    expect(secondResults.title).to.be.deep.equal(book.title);
   });
 
-  it('Can get book`s comment by id', done => {
-    done();
-  });
+  it('Can get book`s comment by id', async () => {});
 });

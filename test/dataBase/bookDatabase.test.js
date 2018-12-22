@@ -18,13 +18,13 @@ chai.use(dirtyChai);
 describe('bookDatabase.test.js', function() {
   this.timeout(10000);
 
-  before(done => {
-    bookDatabase.connect();
-    bookDatabase.clear(done);
+  before(async () => {
+    await bookDatabase.connect();
+    await bookDatabase.clear();
   });
 
-  after(done => {
-    bookDatabase.close(done);
+  after(async () => {
+    await bookDatabase.close();
   });
 
   it('Can insert book', async () => {
@@ -42,7 +42,7 @@ describe('bookDatabase.test.js', function() {
   it('Can get book by id', async () => {
     const result = await bookDatabase.getBook(book.id);
     expect(result).to.not.be.undefined();
-    expect(result.id).to.be.equal(book.id.id);
+    expect(result.id).to.be.equal(book.id);
     expect(result.title).to.be.deep.equal(book.title);
   });
 
@@ -50,7 +50,7 @@ describe('bookDatabase.test.js', function() {
     book.title = 'new_title';
     const result = await bookDatabase.updateBook(book);
     expect(result).to.not.be.undefined();
-    expect(result.id).to.be.equal(book.id.id);
+    expect(result.id).to.be.equal(book.id);
     expect(result.title).to.be.deep.equal(book.title);
   });
 

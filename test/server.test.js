@@ -13,16 +13,18 @@ describe('server.test.js', function() {
   const login = route.api + route.login;
   const profile = route.api + route.profile;
 
-  before(() => {
+  before(done => {
     server = app.listen(port, () => {
       console.log(`Listening on http://localhost:${port}`);
       request = supertest.agent(server);
+      done();
     });
   });
 
-  after(() => {
+  after(done => {
     server.close(() => {
       console.log('Server Closed');
+      done();
     });
   });
 

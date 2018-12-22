@@ -1,7 +1,6 @@
 const Book = require('../models/books');
 const tools = require('../utils/tools');
 const { DataBase } = require('./database');
-const mongoose = require('mongoose');
 
 const CACHE_TIME = parseInt(process.env.CACHE_TIME);
 
@@ -19,7 +18,6 @@ class BookDatabase extends DataBase {
     this.updateBook = this.updateBook.bind(this);
     this.getBook = this.getBook.bind(this);
     this.getBooks = this.getBooks.bind(this);
-    this.createResultBook = this.createResultBook.bind(this);
   }
 
   /* *************************************************************
@@ -39,7 +37,7 @@ class BookDatabase extends DataBase {
 
     if (findBook === null) {
       const dbBook = new Book({
-        id: mongoose.Types.ObjectId(book.id),
+        id: book.id,
         cache_timestamp: book.cache_timestamp,
         authors: book.authors,
         title: book.title,
@@ -47,10 +45,10 @@ class BookDatabase extends DataBase {
         published_date: book.published_date,
         thumbnail: book.thumbnail
       });
-      return this.saveInDB(dbBook);
+      return await this.saveInDB(dbBook);
     } else if (tools.delay(findBook.cache_timestamp) > CACHE_TIME) {
       findBook.cache_timestamp = new Date();
-      return this.updateBook(findBook);
+      return await this.updateBook(findBook);
     } else {
       return findBook;
     }
@@ -65,8 +63,7 @@ class BookDatabase extends DataBase {
    *
    ************************************************************ */
   async getBooks(text, limit) {
-    const results = await Book.search(text).limit(limit);
-    return results.map(result => (result = this.createResultBook(result)));
+    return await Book.search(text).limit(limit);
   }
 
   /* *************************************************************
@@ -82,7 +79,7 @@ class BookDatabase extends DataBase {
     const result = await Book.findOne({
       id: id
     });
-    return this.createResultBook(result);
+    return result;
   }
 
   /* *************************************************************
@@ -96,20 +93,6 @@ class BookDatabase extends DataBase {
   /* istanbul ignore next */
   insertBooks(books) {
     books.map(book => this.insertBook(book));
-  }
-
-  createResultBook(dbBook) {
-    const book = {
-      id: this.revertId(dbBook.id.id),
-      cache_timestamp: dbBook.cache_timestamp,
-      authors: dbBook.authors,
-      title: dbBook.title,
-      summary: dbBook.summary,
-      published_date: dbBook.published_date,
-      thumbnail: dbBook.thumbnail
-    };
-
-    return book;
   }
 
   /* *************************************************************
@@ -132,7 +115,7 @@ class BookDatabase extends DataBase {
         new: true
       }
     );
-    return this.createResultBook(result);
+    return result;
   }
 }
 

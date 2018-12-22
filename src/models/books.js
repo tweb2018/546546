@@ -7,7 +7,7 @@ mongoose.plugin(require('mongoose-regex-search'));
 const schema = new Schema(
   {
     id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       searchable: false,
       index: {
         unique: true
@@ -30,9 +30,6 @@ const schema = new Schema(
     thumbnail: {
       type: String,
       searchable: false
-    },
-    comments: {
-      type: [mongoose.Schema.Types.ObjectId]
     }
   },
   // used to delete _v in mongoose object
