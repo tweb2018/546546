@@ -87,7 +87,7 @@ const typeDefs = gql`
 
   type Mutation {
     insertUser(data: UserInput!): User
-    insertBookStars(data: BookStarsInput!): BookStars
+    insertBookStars(data: BookStarsInput!): Book
     deleteBookStars(bookId: ID!, userId: ID!): Boolean
     deleteBookStarsByBookId(bookId: ID!): Boolean
     deleteBookStarsByUserId(userId: ID!): Boolean
@@ -167,7 +167,8 @@ const resolvers = {
       return user;
     },
     insertBookStars: async (_, { data }) => {
-      return await bookStarsService.insertBookStars(data);
+      await bookStarsService.insertBookStars(data);
+      return bookService.getBook(data.bookId);
     },
     deleteBookStars: async (_, { bookId, userId }) => {
       return await bookStarsService.deleteBookStars(bookId, userId);
