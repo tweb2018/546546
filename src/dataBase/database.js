@@ -43,7 +43,6 @@ class DataBase {
     this.db.once('close', () => {
       console.log('Disconnected from DB');
     });
-    // Difficult to test
     /* istanbul ignore next */
     this.db.on('error', () => {
       console.error.bind(console, 'Connection error: ');

@@ -79,6 +79,34 @@ const GET_BEST_BOOKS = gql`
   }
 `;
 
+const INSERT_BOOK_STARS = gql`
+  mutation InsertBookStars($data: BookStarsInput!) {
+    insertBookStars(data: $data) {
+      bookId
+      userId
+      note
+    }
+  }
+`;
+
+const DELETE_BOOK_STARS = gql`
+  mutation DeleteBookStars($bookId: ID!, $userId: ID!) {
+    deleteBookStars(bookId: $bookId, userId: $userId)
+  }
+`;
+
+const DELETE_BOOK_STARS_BY_BOOKID = gql`
+  mutation DeleteBookStarsByBookId($bookId: ID!) {
+    deleteBookStarsByBookId(bookId: $bookId)
+  }
+`;
+
+const DELETE_BOOK_STARS_BY_USERID = gql`
+  mutation DeleteBookStarsByUserId($userId: ID!) {
+    deleteBookStarsByUserId(userId: $userId)
+  }
+`;
+
 let fetchBook = Object.assign({}, book);
 fetchBook.averageNote = 0;
 fetchBook.comments = [];
@@ -188,8 +216,16 @@ describe('graphql.test.js', function() {
   });
 
   it('Can fetch five best books', async () => {
-    // TODO
-    /*await insertBookStars();
+    await insertBook();
+    await insertBookStars();
+
+    await query({
+      query: GET_BOOKS,
+      variables: {
+        title: 'Mama mia',
+        limit: limit
+      }
+    });
 
     const results = await query({
       query: GET_BEST_BOOKS,
@@ -198,8 +234,67 @@ describe('graphql.test.js', function() {
       }
     });
 
-    const { bookStars } = results.data;
-    expect(bookStars).to.not.be.undefined();
-    expect(books.length).to.be.greaterThan(0);*/
+    const { bestBooks } = results.data;
+    expect(bestBooks.length).to.be.greaterThan(0);
+    expect(bestBooks[0].averageNote).to.be.deep.equal(bookStars.note);
+  });
+
+  it('Can insert book stars', async () => {
+    const result = await mutate({
+      mutation: INSERT_BOOK_STARS,
+      variables: {
+        data: bookStars
+      }
+    });
+
+    const { insertBookStars } = result.data;
+
+    expect(insertBookStars).to.deep.equal(bookStars);
+  });
+
+  it('Can delete book stars', async () => {
+    await insertBookStars();
+
+    const result = await mutate({
+      mutation: DELETE_BOOK_STARS,
+      variables: {
+        bookId: bookStars.bookId,
+        userId: bookStars.userId
+      }
+    });
+
+    const { deleteBookStars } = result.data;
+
+    expect(deleteBookStars).to.be.true();
+  });
+
+  it('Can delete book stars by bookId', async () => {
+    await insertBookStars();
+
+    const result = await mutate({
+      mutation: DELETE_BOOK_STARS_BY_BOOKID,
+      variables: {
+        bookId: bookStars.bookId
+      }
+    });
+
+    const { deleteBookStarsByBookId } = result.data;
+
+    expect(deleteBookStarsByBookId).to.be.true();
+  });
+
+  it('Can delete book stars by usereId', async () => {
+    await insertBookStars();
+
+    const result = await mutate({
+      mutation: DELETE_BOOK_STARS_BY_USERID,
+      variables: {
+        userId: bookStars.userId
+      }
+    });
+
+    const { deleteBookStarsByUserId } = result.data;
+
+    expect(deleteBookStarsByUserId).to.be.true();
   });
 });

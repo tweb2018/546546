@@ -93,9 +93,8 @@ class BookStarsDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  async getAllBookStars(options) {
-    const optionsToGive = options === 'undefined' ? {} : options;
-    return await BookStars.find(optionsToGive);
+  async getAllBookStars(options = {}) {
+    return await BookStars.find(options);
   }
 
   /* *************************************************************
@@ -130,13 +129,13 @@ class BookStarsDatabase extends DataBase {
   }
 
   async deleteBookStarsByBookId(bookId) {
-    return await BookStars.deleteOne({
+    return await BookStars.deleteMany({
       bookId: bookId
     });
   }
 
   async deleteBookStarsByUserId(userId) {
-    return await BookStars.deleteOne({
+    return await BookStars.deleteMany({
       userId: userId
     });
   }

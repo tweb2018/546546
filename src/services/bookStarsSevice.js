@@ -32,10 +32,8 @@ class BookStarsService {
     );
   }
 
-  async insertBookStars(bookId, userId, note) {
-    return await bookStarsDatabase.insertBookStars(
-      this.createBookStars(bookId, userId, note)
-    );
+  async insertBookStars(bookStars) {
+    return await bookStarsDatabase.insertBookStars(bookStars);
   }
 
   async updateBookStars(bookStars) {

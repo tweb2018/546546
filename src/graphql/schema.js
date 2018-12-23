@@ -53,6 +53,7 @@ const typeDefs = gql`
     id: ID!
     bookId: String!
     userId: String!
+    comment: String!
   }
 
   type Query {
@@ -60,6 +61,14 @@ const typeDefs = gql`
     book(id: String!): Book
     bestBooks(limit: Int): [Book]
     profile: User
+  }
+
+  # TODO => Patrick
+  input CommentInput {
+    id: ID!
+    bookId: String!
+    userId: String!
+    comment: String!
   }
 
   input UserInput {
@@ -79,9 +88,9 @@ const typeDefs = gql`
   type Mutation {
     insertUser(data: UserInput!): User
     insertBookStars(data: BookStarsInput!): BookStars
-    deleteBookStars(bookId: ID!, userId: ID!): BookStars
-    deleteBookStarsByBookId(bookId: ID!): BookStars
-    deleteBookStarsByUserId(userId: ID!): BookStars
+    deleteBookStars(bookId: ID!, userId: ID!): Boolean
+    deleteBookStarsByBookId(bookId: ID!): Boolean
+    deleteBookStarsByUserId(userId: ID!): Boolean
   }
 `;
 
@@ -113,8 +122,7 @@ const resolvers = {
     },
     // args : limit (optionnal)
     bestBooks: async (parent, args, context, info) => {
-      // TODO retrieve 5 best book average note from book database
-      return [];
+      return bookService.getBestBook(args.limit);
     },
     profile: (parent, args, context, info) => {
       if (context.uuid === null) {
@@ -133,17 +141,7 @@ const resolvers = {
       return []; // TODO => Patrick
     },
     averageNote: async (parent, args, context, info) => {
-      const bookStars = await bookStarsService.getBookStarsByBookId(parent.id);
-
-      if (bookStars.length === 0) {
-        return 0;
-      } else {
-        const noteAverage = bookStars
-          .map(bookStarsFetched => bookStarsFetched.note / bookStars.length)
-          .reduce((prev, current) => prev + current);
-
-        return Math.round(noteAverage * 2) / 2;
-      }
+      return await bookService.getBookAverageNote(parent.id);
     }
   },
   User: {
@@ -169,16 +167,16 @@ const resolvers = {
       return user;
     },
     insertBookStars: async (_, { data }) => {
-      return await bookService.insertBookStars(data);
+      return await bookStarsService.insertBookStars(data);
     },
     deleteBookStars: async (_, { bookId, userId }) => {
-      return await bookService.deleteBookStars(bookId, userId);
+      return await bookStarsService.deleteBookStars(bookId, userId);
     },
     deleteBookStarsByBookId: async (_, { bookId }) => {
-      return await bookService.deleteBookStarsByBookId(bookId);
+      return await bookStarsService.deleteBookStarsByBookId(bookId);
     },
     deleteBookStarsByUserId: async (_, { userId }) => {
-      return await bookService.deleteBookStarsByUserId(userId);
+      return await bookStarsService.deleteBookStarsByUserId(userId);
     }
   }
 };

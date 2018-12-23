@@ -49,8 +49,8 @@ describe('bookDatabase.test.js', function() {
     expect(result).to.be.deep.equal(book);
   });
 
-  it('Can get books', async () => {
-    const result = await bookDatabase.getBooks('', 5);
+  it('Can search books', async () => {
+    const result = await bookDatabase.searchBooks('', 5);
     expect(result.length).to.be.greaterThan(0);
   });
 
@@ -97,5 +97,10 @@ describe('bookDatabase.test.js', function() {
     expect(result.cache_timestamp).to.be.deep.equal(
       cacheResult.cache_timestamp
     );
+  });
+
+  it('Can get all books', async () => {
+    const results = await bookDatabase.getAllBooks(book);
+    expect(results.length).to.be.deep.greaterThan(0);
   });
 });

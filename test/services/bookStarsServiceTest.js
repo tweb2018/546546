@@ -59,12 +59,8 @@ describe('bookStarsDatabase.test.js', function() {
   });
 
   it('Can insert bookStars', async () => {
-    bookStarsDatabse.clear();
-    let result = await bookStarsService.insertBookStars(
-      bookStars.bookId,
-      bookStars.userId,
-      bookStars.note
-    );
+    await bookStarsDatabse.clear();
+    let result = await bookStarsService.insertBookStars(bookStars);
 
     result = testTools.deleteMongooseId(result);
 

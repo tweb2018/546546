@@ -17,7 +17,8 @@ class BookDatabase extends DataBase {
     this.insertBooks = this.insertBooks.bind(this);
     this.updateBook = this.updateBook.bind(this);
     this.getBook = this.getBook.bind(this);
-    this.getBooks = this.getBooks.bind(this);
+    this.searchBooks = this.searchBooks.bind(this);
+    this.getAllBooks = this.getAllBooks.bind(this);
   }
 
   /* *************************************************************
@@ -62,8 +63,12 @@ class BookDatabase extends DataBase {
    * @description construction and insertion of a book in DB
    *
    ************************************************************ */
-  async getBooks(text, limit) {
+  async searchBooks(text = '', limit = 5) {
     return await Book.search(text).limit(limit);
+  }
+
+  async getAllBooks() {
+    return await Book.find({});
   }
 
   /* *************************************************************
