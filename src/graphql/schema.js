@@ -124,7 +124,7 @@ const resolvers = {
     bestBooks: async (parent, args, context, info) => {
       return bookService.getBestBook(args.limit);
     },
-    profile: (parent, args, context, info) => {
+    profile: async (parent, args, context, info) => {
       console.log('dans Profile()');
       if (context.uuid === null) {
         console.log('uuid is null');
