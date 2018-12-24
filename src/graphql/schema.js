@@ -91,13 +91,15 @@ const resolvers = {
       return bookService.getBook(args.id);
     },
 
-    profile: (parent, args, context, info) => {
+    profile: async (parent, args, context, info) => {
+      console.log('dans Profile()');
       if (context.uuid === null) {
         console.log('uuid is null');
         return null;
       } else {
+        console.log('Dans le context');
         console.log('Uuid from profile: ', context.uuid);
-        const user = userService.getUser(context.uuid);
+        const user = await userService.getUser(context.uuid);
         console.log('User name: ', user.email);
         return user;
       }

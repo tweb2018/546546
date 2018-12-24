@@ -50,11 +50,12 @@ getUuidToken = authToken => {
       .auth()
       .verifyIdToken(authToken)
       .then(decodedToken => {
-        console.log('decode Token: ', decodedToken.uid);
+        console.log('decode Token: ', decodedToken);
         return decodedToken.uid;
       })
       .catch(err => {
-        console.log(err);
+        console.log('Pas de Token fourni');
+        //console.log(err);
       });
   }
 };

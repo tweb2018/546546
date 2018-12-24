@@ -22,7 +22,7 @@ const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
-app.use(route.api, auth);
+//app.use(route.api, auth);
 
 /* istanbul ignore if  */
 if (process.env.NODE_MODE !== 'test') {
@@ -34,13 +34,12 @@ if (process.env.NODE_MODE !== 'test') {
     context: async ({ req }) => {
       const token = req.headers.authorization || '';
       //console.log('jwt-token recieved: ', token);
-      const uuid = await getUuidToken(token).then(uuid => {
-        return uuid;
+      const uuid = await getUuidToken(token).catch(() => {
+        return null;
       });
-      console.log('Uuid after: ', uuid);
 
       // TODO uuid is not passed to context.
-      return uuid;
+      return { uuid };
     }
   });
 
@@ -49,6 +48,7 @@ if (process.env.NODE_MODE !== 'test') {
     path: route.graphql
   });
 
+  /* istanbul ignore if  */
   app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
   });

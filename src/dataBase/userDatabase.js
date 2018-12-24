@@ -41,7 +41,7 @@ class UserDatabase extends DataBase {
 
   createResultUser(dbUser) {
     const user = {
-      id: this.revertId(dbUser.id.id),
+      //id: dbUser.id,
       login: dbUser.login,
       first_name: dbUser.first_name,
       last_name: dbUser.last_name,
@@ -65,7 +65,8 @@ class UserDatabase extends DataBase {
     const result = await User.findOne({
       id
     });
-    return this.createResultUser(result);
+    console.log('Result User', result);
+    return result;
   }
 
   /* *************************************************************

@@ -2,6 +2,7 @@ const userDataBase = require('../dataBase/userDatabase');
 
 class UserService {
   async getUser(id) {
+    console.log('User id to look in DB', id);
     return await userDataBase.getUser(id);
   }
 
