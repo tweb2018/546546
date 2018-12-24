@@ -15,10 +15,7 @@ const schema = new Schema(
     first_name: String,
     last_name: String,
     email: String,
-    avatar: String,
-    comments: {
-      type: [mongoose.Schema.Types.ObjectId]
-    }
+    avatar: String
   },
   // used to delete _v in mongoose object
   {

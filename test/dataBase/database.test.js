@@ -20,53 +20,39 @@ describe('database.test.js', function() {
 
   let db;
 
-  describe('Create Database', () => {
-    it('Can create database', () => {
-      db = new DataBase({});
-      expect(db).to.not.be.undefined();
-    });
+  it('Can create database', () => {
+    db = new DataBase({});
+    expect(db).to.not.be.undefined();
   });
 
-  describe('Connect Database', () => {
-    it('Can connect to database', done => {
-      db.connect(done);
-    });
+  it('Can connect to database', async () => {
+    await db.connect();
+    expect(db.db).to.not.be.null();
+    await db.clear();
   });
 
-  describe('Clear Database', () => {
-    it('Can clear to database', done => {
-      db.clear(done);
+  it('Can save data to Database', async () => {
+    const dbBook = new Book({
+      id: book.id,
+      cache_timestamp: book.cache_timestamp,
+      authors: book.authors,
+      title: book.title,
+      summary: book.summary,
+      published_date: book.published_date,
+      thumbnail: book.thumbnail
     });
+
+    const result = await db.saveInDB(dbBook);
+    expect(result).to.not.be.undefined();
+    expect(result.id).to.be.equal(book.id);
+    expect(result.title).to.be.deep.equal(book.title);
   });
 
-  describe('Save data to Database', () => {
-    it('Can save data to Database', async () => {
-      const dbBook = new Book({
-        id: book.id,
-        cache_timestamp: book.cache_timestamp,
-        authors: book.authors,
-        title: book.title,
-        summary: book.summary,
-        published_date: book.published_date,
-        thumbnail: book.thumbnail
-      });
-
-      const result = await db.saveInDB(dbBook);
-      expect(result).to.not.be.undefined();
-      expect(result.id).to.be.equal(book.id);
-      expect(result.title).to.be.deep.equal(book.title);
-    });
+  it('Can drop database', async () => {
+    await db.clear();
   });
 
-  describe('Drop Database', () => {
-    it('Can drop database', done => {
-      db.clear(done);
-    });
-  });
-
-  describe('Diconnect Database', () => {
-    it('Can disconnect to database', done => {
-      db.close(done);
-    });
+  it('Can disconnect to database', async () => {
+    await db.close();
   });
 });

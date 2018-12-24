@@ -27,17 +27,15 @@ class DataBase {
     this.close = this.close.bind(this);
     this.clear = this.clear.bind(this);
     this.saveInDB = this.saveInDB.bind(this);
-    this.revertId = this.revertId.bind(this);
   }
 
   // initialize db connection
-  connect(done) {
-    mongoose.connect(
+  async connect() {
+    await mongoose.connect(
       `${this.dbUrl}/${this.dbName}`,
       {
         useNewUrlParser: true
-      },
-      done
+      }
     );
 
     this.db = mongoose.connection;
@@ -45,7 +43,6 @@ class DataBase {
     this.db.once('close', () => {
       console.log('Disconnected from DB');
     });
-    // Difficult to test
     /* istanbul ignore next */
     this.db.on('error', () => {
       console.error.bind(console, 'Connection error: ');
@@ -62,8 +59,8 @@ class DataBase {
    * @description use for test purpose to close the connection
    *
    ************************************************************ */
-  close(done) {
-    this.db.close(done);
+  async close() {
+    return await this.db.close();
   }
 
   /* *************************************************************
@@ -72,8 +69,8 @@ class DataBase {
    * @description clear the database - for test purpose
    *
    ************************************************************ */
-  clear(done) {
-    this.db.dropDatabase(done);
+  async clear() {
+    return await this.db.dropDatabase();
   }
 
   /* *************************************************************
@@ -85,11 +82,7 @@ class DataBase {
    *
    ***************************************************************** */
   async saveInDB(value) {
-    return await value.save();
-  }
-
-  revertId(id) {
-    return id.toString('utf8');
+    return value.save();
   }
 }
 

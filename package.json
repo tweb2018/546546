@@ -8,7 +8,7 @@
     "url": "https://github.com/tweb2018/Backend_BookBook"
   },
   "scripts": {
-    "test": "nyc --reporter=text --reporter=html mocha --recursive",
+    "test": "nyc --reporter=text --reporter=html mocha --recursive --exit",
     "start": "nodemon server.js"
   },
   "eslintConfig": {
@@ -53,7 +53,6 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "graphql-tag": "^2.10.0",
     "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",

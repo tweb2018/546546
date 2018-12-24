@@ -9,8 +9,10 @@ const {
 } = require('graphql-custom-types');
 
 const bookService = require('../services/bookService');
+const bookStarsService = require('../services/bookStarsSevice');
 const userService = require('../services/userService');
 
+/* istanbul ignore next  */
 const typeDefs = gql`
   scalar URL
   scalar Email
@@ -24,9 +26,16 @@ const typeDefs = gql`
     title: String
     authors: [String]
     summary: String
-    published_date: String
+    published_date: DateTime
     thumbnail: URL
     comments: [Comment]
+    averageNote: Float
+  }
+
+  type BookStars {
+    bookId: ID!
+    userId: ID!
+    note: Float
   }
 
   type User {
@@ -36,19 +45,30 @@ const typeDefs = gql`
     last_name: String
     email: Email
     comments: [Comment]
+    bookStars: [BookStars]
   }
 
   # TODO => Patrick
   type Comment {
     id: ID!
-    login: String
-    text: String
+    bookId: String!
+    userId: String!
+    comment: String!
   }
 
   type Query {
     books(text: String, limit: Int): [Book]
     book(id: String!): Book
+    bestBooks(limit: Int): [Book]
     profile: User
+  }
+
+  # TODO => Patrick
+  input CommentInput {
+    id: ID!
+    bookId: String!
+    userId: String!
+    comment: String!
   }
 
   input UserInput {
@@ -59,8 +79,18 @@ const typeDefs = gql`
     email: Email
   }
 
+  input BookStarsInput {
+    bookId: ID!
+    userId: ID!
+    note: Float!
+  }
+
   type Mutation {
     insertUser(data: UserInput!): User
+    insertBookStars(data: BookStarsInput!): Book
+    deleteBookStars(bookId: ID!, userId: ID!): Boolean
+    deleteBookStarsByBookId(bookId: ID!): Boolean
+    deleteBookStarsByUserId(userId: ID!): Boolean
   }
 `;
 
@@ -82,16 +112,19 @@ const resolvers = {
   UUID: GraphQLUUID,
 
   Query: {
-    // args : book text (optional)
-    books: (parent, args, context, info) => {
-      return bookService.getBooks(args.text, args.limit);
+    // args : book text (optional), limit (optionnal)
+    books: async (parent, args, context, info) => {
+      return await bookService.getBooks(args.text, args.limit);
     },
     // args : book id
-    book: (parent, args, context, info) => {
-      return bookService.getBook(args.id);
+    book: async (parent, args, context, info) => {
+      return await bookService.getBook(args.id);
     },
-
-    profile: async (parent, args, context, info) => {
+    // args : limit (optionnal)
+    bestBooks: async (parent, args, context, info) => {
+      return bookService.getBestBook(args.limit);
+    },
+    profile: (parent, args, context, info) => {
       console.log('dans Profile()');
       if (context.uuid === null) {
         console.log('uuid is null');
@@ -106,13 +139,19 @@ const resolvers = {
     }
   },
   Book: {
-    comments: (parent, args, context, info) => {
+    comments: async (parent, args, context, info) => {
       return []; // TODO => Patrick
+    },
+    averageNote: async (parent, args, context, info) => {
+      return await bookService.getBookAverageNote(parent.id);
     }
   },
   User: {
-    comments: (parent, args, context, info) => {
+    comments: async (parent, args, context, info) => {
       return []; // TODO => Patrick
+    },
+    bookStars: async (parent, args, context, info) => {
+      return await bookService.getBookStarsByUserId(parent.id);
     }
   },
 
@@ -128,6 +167,19 @@ const resolvers = {
       userService.insertUser(user);
       console.log(`User ${user.email} was inserted in dataBase`);
       return user;
+    },
+    insertBookStars: async (_, { data }) => {
+      await bookStarsService.insertBookStars(data);
+      return bookService.getBook(data.bookId);
+    },
+    deleteBookStars: async (_, { bookId, userId }) => {
+      return await bookStarsService.deleteBookStars(bookId, userId);
+    },
+    deleteBookStarsByBookId: async (_, { bookId }) => {
+      return await bookStarsService.deleteBookStarsByBookId(bookId);
+    },
+    deleteBookStarsByUserId: async (_, { userId }) => {
+      return await bookStarsService.deleteBookStarsByUserId(userId);
     }
   }
 };

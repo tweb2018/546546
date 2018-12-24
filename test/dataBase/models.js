@@ -1,32 +1,36 @@
-const mongoose = require('mongoose');
-
 const book = {
-  id: mongoose.Types.ObjectId('book_id_1234'),
+  id: 'book_id_1234',
   cache_timestamp: new Date(),
   authors: ['book_authors'],
   title: 'book_title',
   summary: 'book_description',
   published_date: new Date(),
-  thumbnail: 'book_thumbnail',
-  comments: []
+  thumbnail: 'book_thumbnail'
 };
 
 const user = {
-  id: mongoose.Types.ObjectId('user_id_1234'),
+  id: 'user_id_1234',
   login: 'user_login',
   first_name: 'user_first_name',
   last_name: 'user_last_name',
   email: 'user_email',
-  avatar: 'user_avatar',
-  comments: []
+  avatar: 'user_avatar'
 };
 
 const comment = {
-  id: mongoose.Types.ObjectId('comment_id_1')
+  bookId: book.id,
+  userId: user.id
+};
+
+const bookStars = {
+  bookId: book.id,
+  userId: user.id,
+  note: 5.5
 };
 
 module.exports = {
   book,
   user,
-  comment
+  comment,
+  bookStars
 };
