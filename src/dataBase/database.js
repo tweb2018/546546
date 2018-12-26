@@ -30,8 +30,8 @@ class DataBase {
   }
 
   // initialize db connection
-  async connect() {
-    await mongoose.connect(
+  connect() {
+    mongoose.connect(
       `${this.dbUrl}/${this.dbName}`,
       {
         useNewUrlParser: true

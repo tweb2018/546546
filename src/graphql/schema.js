@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require("apollo-server-express");
 const {
   GraphQLEmail,
   GraphQLURL,
@@ -6,11 +6,11 @@ const {
   GraphQLLimitedString,
   GraphQLPassword,
   GraphQLUUID
-} = require('graphql-custom-types');
+} = require("graphql-custom-types");
 
-const bookService = require('../services/bookService');
-const bookStarsService = require('../services/bookStarsSevice');
-const userService = require('../services/userService');
+const bookService = require("../services/bookService");
+const bookStarsService = require("../services/bookStarsSevice");
+const userService = require("../services/userService");
 
 /* istanbul ignore next  */
 const typeDefs = gql`
@@ -87,6 +87,7 @@ const typeDefs = gql`
 
   type Mutation {
     insertUser(data: UserInput!): User
+    editUser(data: UserInput!): User
     insertBookStars(data: BookStarsInput!): Book
     deleteBookStars(bookId: ID!, userId: ID!): Boolean
     deleteBookStarsByBookId(bookId: ID!): Boolean
@@ -125,15 +126,12 @@ const resolvers = {
       return bookService.getBestBook(args.limit);
     },
     profile: async (parent, args, context, info) => {
-      console.log('dans Profile()');
       if (context.uuid === null) {
-        console.log('uuid is null');
+        console.log("uuid is null");
         return null;
       } else {
-        console.log('Dans le context');
-        console.log('Uuid from profile: ', context.uuid);
+        console.log("Uuid from profile: ", context.uuid);
         const user = await userService.getUser(context.uuid);
-        console.log('User name: ', user.email);
         return user;
       }
     }
@@ -166,6 +164,18 @@ const resolvers = {
       };
       userService.insertUser(user);
       console.log(`User ${user.email} was inserted in dataBase`);
+      return user;
+    },
+    editUser: (_, { data }) => {
+      const user = {
+        id: data.id,
+        login: data.login,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email
+      };
+      userService.insertUser(user);
+      console.log(`User ${user.email} was edited in dataBase`);
       return user;
     },
     insertBookStars: async (_, { data }) => {
