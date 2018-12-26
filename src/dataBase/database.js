@@ -30,13 +30,22 @@ class DataBase {
   }
 
   // initialize db connection
-  connect() {
-    mongoose.connect(
-      `${this.dbUrl}/${this.dbName}`,
-      {
-        useNewUrlParser: true
-      }
-    );
+  async connect() {
+    if (process.env.NODE_MODE !== 'test') {
+      mongoose.connect(
+        `${this.dbUrl}/${this.dbName}`,
+        {
+          useNewUrlParser: true
+        }
+      );
+    } else {
+      await mongoose.connect(
+        `${this.dbUrl}/${this.dbName}`,
+        {
+          useNewUrlParser: true
+        }
+      );
+    }
 
     this.db = mongoose.connection;
 
