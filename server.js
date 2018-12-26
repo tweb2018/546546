@@ -7,8 +7,6 @@ if (process.env.NODE_MODE !== 'production') {
 }
 
 const express = require('express');
-const auth = require('./src/routes/auth');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./src/graphql/schema');
@@ -39,6 +37,7 @@ if (process.env.NODE_MODE !== 'test') {
       });
 
       // TODO uuid is not passed to context.
+      //console.log('uuid: ', uuid);
       return { uuid };
     }
   });
