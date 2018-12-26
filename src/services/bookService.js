@@ -33,7 +33,9 @@ class BookService {
       googleBooks.search(text, options, async (error, results) => {
         if (error === null) {
           /* Renvoie immédiat du résultat pour que l'utilisateur le recoive le plus vite possible */
-          resolve(results);
+          if (process.env.NODE_MODE !== 'test') {
+            resolve(results);
+          }
 
           const searchResult = results.map(book =>
             this.createBook(
@@ -49,6 +51,7 @@ class BookService {
           /* istanbul ignore else */
           if (process.env.NODE_MODE === 'test') {
             await bookDatabase.insertBooks(searchResult);
+            resolve(results);
           } else {
             bookDatabase.insertBooks(searchResult);
           }
