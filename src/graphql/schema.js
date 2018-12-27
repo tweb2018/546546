@@ -63,6 +63,7 @@ const typeDefs = gql`
     book(id: String!): Book
     bestBooks(limit: Int): [Book]
     profile: User
+    bookStars(bookId: ID!, userId: ID!): BookStars
   }
 
   # TODO => Patrick
@@ -125,7 +126,11 @@ const resolvers = {
     },
     // args : limit (optionnal)
     bestBooks: async (parent, args, context, info) => {
-      return bookService.getBestBook(args.limit);
+      return await bookService.getBestBook(args.limit);
+    },
+    // args : bookId, userId
+    bookStars: async (parent, args, context, info) => {
+      return await bookStarsService.getBookStars(args.bookId, args.userId);
     },
     profile: async (parent, args, context, info) => {
       if (context.uuid === null) {
