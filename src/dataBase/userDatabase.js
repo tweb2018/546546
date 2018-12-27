@@ -65,7 +65,6 @@ class UserDatabase extends DataBase {
     const result = await User.findOne({
       id
     });
-    console.log('Result User', result);
     return result;
   }
 
@@ -79,8 +78,6 @@ class UserDatabase extends DataBase {
    *
    ************************************************************ */
   async updateUser(user) {
-    console.log('edited User before', user);
-
     await User.findOneAndUpdate(
       {
         id: user.id
@@ -90,7 +87,7 @@ class UserDatabase extends DataBase {
         runValidators: true
       }
     ).then(res => {
-      console.log('edited User result', res);
+      //console.log('edited User result', res);
     });
   }
 }

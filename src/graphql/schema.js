@@ -82,6 +82,11 @@ const typeDefs = gql`
     email: Email
   }
 
+  input PasswordInput {
+    id: ID
+    password: String
+  }
+
   input BookStarsInput {
     bookId: ID!
     userId: ID!
@@ -91,6 +96,7 @@ const typeDefs = gql`
   type Mutation {
     insertUser(data: UserInput!): User
     editUser(data: UserInput!): User
+    editPassword(data: PasswordInput!): Boolean
     updateBookStars(data: BookStarsInput!): BookStars
     deleteBookStars(bookId: ID!, userId: ID!): Boolean
     deleteBookStarsByBookId(bookId: ID!): Boolean
@@ -172,15 +178,6 @@ const resolvers = {
     /* Not the best way to handle user profile change
     TODO if(time){ changeThisMethod();}*/
     editUser: (_, { data }) => {
-      console.log('data: ', data);
-
-      //if password is not null we set it.
-      if (data.password !== null) {
-        firebaseAdmin.auth().updateUser(data.id, {
-          password: data.password
-        });
-      }
-
       const user = {
         id: data.id,
         login: data.login,
@@ -196,6 +193,30 @@ const resolvers = {
 
       console.log(`User ${user.email} was EDITED in db`);
       return user;
+    },
+    editPassword: (_, { data }) => {
+      //if password is not null we set it.
+      console.log('data: ', data);
+
+      if (data.password !== null) {
+        console.log('Dans editPassword ()');
+
+        return firebaseAdmin
+          .auth()
+          .updateUser(data.id, {
+            password: data.password
+          })
+          .then(() => {
+            console.log('Password Saved');
+            return true;
+          })
+          .catch(error => {
+            console.log(error);
+            return false;
+          });
+      } else {
+        return false;
+      }
     },
     updateBookStars: async (_, { data }) => {
       return await bookStarsService.updateBookStars(data);
