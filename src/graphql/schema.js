@@ -171,7 +171,15 @@ const resolvers = {
     // Not the best way to handle user profile change
     // TODO if(time){ changeThisMethod();}
     editUser: (_, { data }) => {
-      console.log('Edit user -> ', data);
+      console.log('data: ', data);
+
+      //if password is not null we set it.
+      if (data.password !== null) {
+        firebaseAdmin.auth().updateUser(data.id, {
+          password: data.password
+        });
+      }
+
       const user = {
         id: data.id,
         login: data.login,

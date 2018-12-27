@@ -34,7 +34,7 @@ isAuthenticated = (req, res, next) => {
         next();
       })
       .catch(err => {
-        console.log('Erreur d`authentification');
+        console.log('Authentification Error');
         res.sendStatus(401);
       });
   } else {
@@ -55,6 +55,7 @@ getUuidToken = authToken => {
       })
       .catch(err => {
         console.log('Pas de Token fourni');
+        console.log(err);
       });
   }
 };
