@@ -1,12 +1,12 @@
 const BookStars = require('../models/bookStars');
 const { DataBase } = require('./database');
 
-/* **********************************************************************************************
+/**
+ * BookStars database features
  *
- * @class DataBase
- * @description DataBase class is the class that is used to connect and manage the mongoDB DataBase
- *
- *********************************************************************************************** */
+ * @class BookStarsDatabase
+ * @extends {DataBase}
+ */
 class BookStarsDatabase extends DataBase {
   constructor() {
     super();
@@ -19,15 +19,13 @@ class BookStarsDatabase extends DataBase {
     this.deleteBookStars = this.deleteBookStars.bind(this);
   }
 
-  /* *************************************************************
+  /**
+   * Insert a bookstars in the database
    *
-   * @function insertBook(book, done)
-   * @param book The book to insert
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the saved book with a then()
-   * @description construction and insertion of a book in DB
-   *
-   ************************************************************ */
+   * @param {*} bookStars The bookstars to insert
+   * @returns The inserted bookstars
+   * @memberof BookStarsDatabase
+   */
   async insertBookStars(bookStars) {
     const dbBookStars = new BookStars({
       bookId: bookStars.bookId,
@@ -38,15 +36,14 @@ class BookStarsDatabase extends DataBase {
     return await this.saveInDB(dbBookStars);
   }
 
-  /* *************************************************************
+  /**
+   * Get the bookstars which match with the bookId and userId
    *
-   * @function getBook(id, done)
-   * @param id The book's id to fetch
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the book with a then()
-   * @description construction and insertion of a book in DB
-   *
-   ************************************************************ */
+   * @param {*} bookId The book id
+   * @param {*} userId The user id
+   * @returns The bookstars which match with the bookId and userId
+   * @memberof BookStarsDatabase
+   */
   async getBookStars(bookId, userId) {
     return await BookStars.findOne({
       bookId: bookId,
@@ -54,58 +51,50 @@ class BookStarsDatabase extends DataBase {
     });
   }
 
-  /* *************************************************************
+  /**
+   * Get the bookstars which match with the bookId
    *
-   * @function getBook(id, done)
-   * @param id The book's id to fetch
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the book with a then()
-   * @description construction and insertion of a book in DB
-   *
-   ************************************************************ */
+   * @param {*} bookId The book id
+   * @returns The bookstars which match with the bookId
+   * @memberof BookStarsDatabase
+   */
   async getBookStarsByBookId(bookId) {
     return await this.getAllBookStars({
       bookId: bookId
     });
   }
 
-  /* *************************************************************
+  /**
+   * Get the bookstars which match with the userId
    *
-   * @function getBook(id, done)
-   * @param id The book's id to fetch
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the book with a then()
-   * @description construction and insertion of a book in DB
-   *
-   ************************************************************ */
+   * @param {*} userId The user id
+   * @returns The bookstars which match with the userId
+   * @memberof BookStarsDatabase
+   */
   async getBookStarsByUserId(userId) {
     return await this.getAllBookStars({
       userId: userId
     });
   }
 
-  /* *************************************************************
+  /**
+   * Fetch all bookstars
    *
-   * @function getBook(id, done)
-   * @param id The book's id to fetch
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the book with a then()
-   * @description construction and insertion of a book in DB
-   *
-   ************************************************************ */
+   * @param {*} [options={}] Options when fetching
+   * @returns A list of all bookstars
+   * @memberof BookStarsDatabase
+   */
   async getAllBookStars(options = {}) {
     return await BookStars.find(options);
   }
 
-  /* *************************************************************
+  /**
+   * update a bookstars
    *
-   * @function updateBook()
-   * @param book The book to update
-   * @param done Use only this for testing callback
-   * @return A Promise which you can catch the updated book with a then()
-   * @description Update a book
-   *
-   ************************************************************ */
+   * @param {*} bookStars The bookstars to update
+   * @returns The updated bookstars
+   * @memberof BookStarsDatabase
+   */
   async updateBookStars(bookStars) {
     const result = await BookStars.findOneAndUpdate(
       {
@@ -126,6 +115,14 @@ class BookStarsDatabase extends DataBase {
     return result;
   }
 
+  /**
+   * Delete a bookstars which match with bookId and userId
+   *
+   * @param {*} bookId The book id
+   * @param {*} userId The user id
+   * @returns Null if the book was succefuly deleted
+   * @memberof BookStarsDatabase
+   */
   async deleteBookStars(bookId, userId) {
     return await BookStars.deleteOne({
       bookId: bookId,
@@ -133,12 +130,26 @@ class BookStarsDatabase extends DataBase {
     });
   }
 
+  /**
+   * Delete all bookstars which match with bookId
+   *
+   * @param {*} bookId The book id
+   * @returns Null if the book was succefuly deleted
+   * @memberof BookStarsDatabase
+   */
   async deleteBookStarsByBookId(bookId) {
     return await BookStars.deleteMany({
       bookId: bookId
     });
   }
 
+  /**
+   * Delete all bookstars which match with userId
+   *
+   * @param {*} userId The user id
+   * @returns Null if the book was succefuly deleted
+   * @memberof BookStarsDatabase
+   */
   async deleteBookStarsByUserId(userId) {
     return await BookStars.deleteMany({
       userId: userId

@@ -71,6 +71,20 @@ describe('bookStarsDatabase.test.js', function() {
     expect(result.length).to.be.greaterThan(0);
   });
 
+  it('Can insert bookstars when first update book stars', async () => {
+    await bookStarsDatabse.clear();
+    const newBookStart = {
+      bookId: bookStars.bookId,
+      userId: bookStars.userId,
+      note: 6
+    };
+    let result = await bookStarsDatabse.updateBookStars(newBookStart);
+
+    result = testTools.deleteMongooseId(result);
+
+    expect(result).to.be.deep.equal(newBookStart);
+  });
+
   it('Can update book stars', async () => {
     const newBookStart = {
       bookId: bookStars.bookId,

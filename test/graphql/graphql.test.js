@@ -79,19 +79,22 @@ const GET_BEST_BOOKS = gql`
   }
 `;
 
-const INSERT_BOOK_STARS = gql`
-  mutation InsertBookStars($data: BookStarsInput!) {
-    insertBookStars(data: $data) {
-      id
-      title
-      authors
-      summary
-      published_date
-      thumbnail
-      averageNote
-      comments {
-        id
-      }
+const UPDATE_BOOK_STARS = gql`
+  mutation UpdateBookStars($data: BookStarsInput!) {
+    updateBookStars(data: $data) {
+      bookId
+      userId
+      note
+    }
+  }
+`;
+
+const GET_BOOK_STARS = gql`
+  query BookStars($bookId: ID!, $userId: ID!) {
+    bookStars(bookId: $bookId, userId: $userId) {
+      bookId
+      userId
+      note
     }
   }
 `;
@@ -246,18 +249,33 @@ describe('graphql.test.js', function() {
     expect(bestBooks[0].averageNote).to.be.deep.equal(bookStars.note);
   });
 
-  it('Can insert book stars', async () => {
+  it('Can get book stars', async () => {
+    await insertBookStars();
+    const result = await mutate({
+      mutation: GET_BOOK_STARS,
+      variables: {
+        bookId: fetchBookStars.bookId,
+        userId: fetchBookStars.userId
+      }
+    });
+
+    const { bookStars } = result.data;
+
+    expect(bookStars).to.deep.equal(fetchBookStars);
+  });
+
+  it('Can update book stars', async () => {
     await insertBook();
     const result = await mutate({
-      mutation: INSERT_BOOK_STARS,
+      mutation: UPDATE_BOOK_STARS,
       variables: {
         data: bookStars
       }
     });
 
-    const { insertBookStars } = result.data;
+    const { updateBookStars } = result.data;
 
-    expect(insertBookStars.averageNote).to.deep.equal(bookStars.note);
+    expect(updateBookStars.note).to.deep.equal(bookStars.note);
   });
 
   it('Can delete book stars', async () => {

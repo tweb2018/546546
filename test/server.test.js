@@ -35,7 +35,7 @@ describe('server.test.js', function() {
       .expect(404, done);
   });
 
-  it(`[${register}] Should answer`, done => {
+  /*it(`[${register}] Should answer`, done => {
     request
       .post(register)
       .set('Content-Type', 'application/json')
@@ -65,5 +65,5 @@ describe('server.test.js', function() {
       .send({})
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(401, done);
-  });
+  });*/
 });

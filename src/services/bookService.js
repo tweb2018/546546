@@ -2,6 +2,11 @@ const googleBooks = require('google-books-search');
 const bookDatabase = require('../dataBase/bookDatabase');
 const bookStarsService = require('../services/bookStarsSevice');
 
+/**
+ * Book service features
+ *
+ * @class BookService
+ */
 class BookService {
   constructor() {
     this.getBook = this.getBook.bind(this);
@@ -12,6 +17,18 @@ class BookService {
     this.getBookAverageNote = this.getBookAverageNote.bind(this);
   }
 
+  /**
+   * Create a new book
+   *
+   * @param {*} id The book's id
+   * @param {*} authors The book's authors
+   * @param {*} title The book's title
+   * @param {string} [summary=''] The book's summary
+   * @param {*} published_date The book's published_date
+   * @param {*} thumbnail The book's thumbnail
+   * @returns
+   * @memberof BookService
+   */
   createBook(id, authors, title, summary = '', published_date, thumbnail) {
     return {
       id: id,
@@ -24,6 +41,14 @@ class BookService {
     };
   }
 
+  /**
+   * Search books which match with text on the google API
+   *
+   * @param {*} text The text to search
+   * @param {number} [limit=10] The limit of book to return
+   * @returns A list of Books
+   * @memberof BookService
+   */
   searchOnline(text, limit = 10) {
     const options = {
       limit: limit
@@ -33,6 +58,7 @@ class BookService {
       googleBooks.search(text, options, async (error, results) => {
         if (error === null) {
           /* Renvoie immédiat du résultat pour que l'utilisateur le recoive le plus vite possible */
+          /* istanbul ignore if */
           if (process.env.NODE_MODE !== 'test') {
             resolve(results);
           }
@@ -66,6 +92,17 @@ class BookService {
     });
   }
 
+  /**
+   * Search books which match with the text in the database
+   * Search online if the are no results from the database
+   *
+   * If there are results from the database, search asynchronous the book online to refresh the data
+   *
+   * @param {*} text
+   * @param {*} limit
+   * @returns
+   * @memberof BookService
+   */
   async getBooks(text, limit) {
     const results = await bookDatabase.searchBooks(text, limit);
     if (results.length === 0) {
@@ -82,10 +119,24 @@ class BookService {
     }
   }
 
+  /**
+   * Get book by id
+   *
+   * @param {*} id The book's id
+   * @returns The book match with the id
+   * @memberof BookService
+   */
   async getBook(id) {
     return await bookDatabase.getBook(id);
   }
 
+  /**
+   * Get a list of the best books with the higher averageNote
+   *
+   * @param {*} limit A limit of the list size
+   * @returns A list of the best books with the higher averageNote
+   * @memberof BookService
+   */
   async getBestBook(limit) {
     const books = await bookDatabase.getAllBooks();
     const booksWithAverage = await Promise.all(
@@ -100,6 +151,13 @@ class BookService {
       .slice(0, limit);
   }
 
+  /**
+   * Get the book average which match with the id
+   *
+   * @param {*} id The book id to find the averageNote
+   * @returns The book averageNote
+   * @memberof BookService
+   */
   async getBookAverageNote(id) {
     const bookStars = await bookStarsService.getBookStarsByBookId(id);
 
@@ -113,11 +171,6 @@ class BookService {
 
       return Math.round(noteAverage * 2) / 2;
     }
-  }
-
-  // retrive all comments
-  async bookComments(bookId) {
-    // TODO => Patrick
   }
 }
 

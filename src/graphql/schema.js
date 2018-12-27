@@ -116,19 +116,15 @@ const resolvers = {
   UUID: GraphQLUUID,
 
   Query: {
-    // args : book text (optional), limit (optionnal)
     books: async (parent, args, context, info) => {
       return await bookService.getBooks(args.text, args.limit);
     },
-    // args : book id
     book: async (parent, args, context, info) => {
       return await bookService.getBook(args.id);
     },
-    // args : limit (optionnal)
     bestBooks: async (parent, args, context, info) => {
       return await bookService.getBestBook(args.limit);
     },
-    // args : bookId, userId
     bookStars: async (parent, args, context, info) => {
       return await bookStarsService.getBookStars(args.bookId, args.userId);
     },
@@ -173,8 +169,8 @@ const resolvers = {
       console.log(`User ${user.email} was INSTERTED in db`);
       return user;
     },
-    // Not the best way to handle user profile change
-    // TODO if(time){ changeThisMethod();}
+    /* Not the best way to handle user profile change
+    TODO if(time){ changeThisMethod();}*/
     editUser: (_, { data }) => {
       console.log('data: ', data);
 

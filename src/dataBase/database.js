@@ -5,19 +5,12 @@ mongoose.set('useFindAndModify', false);
 // To Avoid collection.ensureIndex is deprecated is deprecated
 mongoose.set('useCreateIndex', true);
 
-/* **********************************************************************************************
+/**
+ * Database features
  *
  * @class DataBase
- * @description DataBase class is the class that is used to connect and manage the mongoDB DataBase
- *
- *********************************************************************************************** */
+ */
 class DataBase {
-  /* ****************************************************
-   *
-   * @constructor - constructor of the DataBase Class
-   * @description - object constructor
-   *
-   *************************************************** */
   constructor() {
     this.dbName = process.env.DB_NAME;
     this.dbUrl = process.env.DB_URL;
@@ -29,8 +22,13 @@ class DataBase {
     this.saveInDB = this.saveInDB.bind(this);
   }
 
-  // initialize db connection
+  /**
+   * initialize db connection
+   *
+   * @memberof DataBase
+   */
   async connect() {
+    /* istanbul ignore if */
     if (process.env.NODE_MODE !== 'test') {
       mongoose.connect(
         `${this.dbUrl}/${this.dbName}`,
@@ -62,34 +60,33 @@ class DataBase {
     });
   }
 
-  /* *************************************************************
+  /**
+   * Use for test purpose to close the connection
    *
-   * @function close()
-   * @description use for test purpose to close the connection
-   *
-   ************************************************************ */
+   * @returns A Promise which you can catch the saved book with a then()
+   * @memberof DataBase
+   */
   async close() {
     return await this.db.close();
   }
 
-  /* *************************************************************
+  /**
+   * Clear the database - for test purpose
    *
-   * @function clear()
-   * @description clear the database - for test purpose
-   *
-   ************************************************************ */
+   * @returns A Promise which you can catch the saved book with a then()
+   * @memberof DataBase
+   */
   async clear() {
     return await this.db.dropDatabase();
   }
 
-  /* *************************************************************
+  /**
+   * Save the value in DB
    *
-   * @function saveInDB
-   * @param value The value to save
-   * @return A Promise which you can catch the saved book with a then()
-   * @description save the value in DB
-   *
-   ***************************************************************** */
+   * @param {*} value The value to save
+   * @returns A Promise which you can catch the saved book with a then()
+   * @memberof DataBase
+   */
   async saveInDB(value) {
     return value.save();
   }

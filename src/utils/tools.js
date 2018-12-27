@@ -1,15 +1,20 @@
+/**
+ * Tools features
+ *
+ * @class Tools
+ */
 class Tools {
   constructor() {
     this.delay = this.delay.bind(this);
   }
 
-  /* *************************************************************
+  /**
+   * Calculated the delay between 2 requests
    *
-   * @function delay()
-   * @description calculated the delay between 2 requests on the same user or repo
-   * @return return this delay
-   *
-   ************************************************************ */
+   * @param {*} queryDate The date to calcule the delay
+   * @returns The calculated delay
+   * @memberof Tools
+   */
   delay(queryDate) {
     return (new Date() - queryDate) / 1000;
   }

@@ -50,14 +50,6 @@ describe('bookStarsDatabase.test.js', function() {
     expect(result).to.be.deep.equal(bookStars);
   });
 
-  it('Can create bookStars from existing bookStars', async () => {
-    const result = await bookStarsService.createBookStarsFromExistingBookStars(
-      bookStars
-    );
-
-    expect(result).to.be.deep.equal(bookStars);
-  });
-
   it('Can insert bookStars', async () => {
     await bookStarsDatabse.clear();
     let result = await bookStarsService.insertBookStars(bookStars);
@@ -103,36 +95,42 @@ describe('bookStarsDatabase.test.js', function() {
     expect(result.length).to.be.greaterThan(0);
   });
 
-  it('Can deleteBookStars', async () => {
-    await bookStarsService.deleteBookStars(bookStars.bookId, bookStars.userId);
-
+  it('Get bookstars note must be zero if not exist', async () => {
+    await bookStarsDatabse.clear();
     const result = await bookStarsService.getBookStars(
       bookStars.bookId,
       bookStars.userId
     );
 
-    expect(result).to.be.null();
+    let compareBookStars = Object.assign({}, bookStars);
+
+    compareBookStars.note = 0;
+
+    expect(result).to.be.deep.equals(compareBookStars);
+  });
+
+  it('Can deleteBookStars', async () => {
+    const result = await bookStarsService.deleteBookStars(
+      bookStars.bookId,
+      bookStars.userId
+    );
+
+    expect(result.ok).to.be.deep.equals(1);
   });
 
   it('Can deleteBookStars by bookId', async () => {
-    await bookStarsService.deleteBookStarsByBookId(bookStars.bookId);
-
-    const result = await bookStarsService.getBookStars(
-      bookStars.bookId,
-      bookStars.userId
+    const result = await bookStarsService.deleteBookStarsByBookId(
+      bookStars.bookId
     );
 
-    expect(result).to.be.null();
+    expect(result.ok).to.be.deep.equals(1);
   });
 
   it('Can deleteBookStars by userId', async () => {
-    await bookStarsService.deleteBookStarsByUserId(bookStars.userId);
-
-    const result = await bookStarsService.getBookStars(
-      bookStars.bookId,
+    const result = await bookStarsService.deleteBookStarsByUserId(
       bookStars.userId
     );
 
-    expect(result).to.be.null();
+    expect(result.ok).to.be.deep.equals(1);
   });
 });
