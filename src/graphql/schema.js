@@ -91,7 +91,7 @@ const typeDefs = gql`
   type Mutation {
     insertUser(data: UserInput!): User
     editUser(data: UserInput!): User
-    insertBookStars(data: BookStarsInput!): Book
+    updateBookStars(data: BookStarsInput!): BookStars
     deleteBookStars(bookId: ID!, userId: ID!): Boolean
     deleteBookStarsByBookId(bookId: ID!): Boolean
     deleteBookStarsByUserId(userId: ID!): Boolean
@@ -201,9 +201,8 @@ const resolvers = {
       console.log(`User ${user.email} was EDITED in db`);
       return user;
     },
-    insertBookStars: async (_, { data }) => {
-      await bookStarsService.insertBookStars(data);
-      return bookService.getBook(data.bookId);
+    updateBookStars: async (_, { data }) => {
+      return await bookStarsService.updateBookStars(data);
     },
     deleteBookStars: async (_, { bookId, userId }) => {
       return await bookStarsService.deleteBookStars(bookId, userId);

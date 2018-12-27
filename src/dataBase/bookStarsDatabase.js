@@ -118,6 +118,11 @@ class BookStarsDatabase extends DataBase {
         new: true
       }
     );
+
+    if (result === null) {
+      return await this.insertBookStars(bookStars);
+    }
+
     return result;
   }
 
