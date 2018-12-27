@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require('apollo-server-express');
 const {
   GraphQLEmail,
   GraphQLURL,
@@ -6,11 +6,11 @@ const {
   GraphQLLimitedString,
   GraphQLPassword,
   GraphQLUUID
-} = require("graphql-custom-types");
+} = require('graphql-custom-types');
 
-const bookService = require("../services/bookService");
-const bookStarsService = require("../services/bookStarsSevice");
-const userService = require("../services/userService");
+const bookService = require('../services/bookService');
+const bookStarsService = require('../services/bookStarsSevice');
+const userService = require('../services/userService');
 
 /* istanbul ignore next  */
 const typeDefs = gql`
@@ -61,6 +61,7 @@ const typeDefs = gql`
     book(id: String!): Book
     bestBooks(limit: Int): [Book]
     profile: User
+    bookStars(bookId: ID!, userId: ID!): BookStars
   }
 
   # TODO => Patrick
@@ -123,14 +124,18 @@ const resolvers = {
     },
     // args : limit (optionnal)
     bestBooks: async (parent, args, context, info) => {
-      return bookService.getBestBook(args.limit);
+      return await bookService.getBestBook(args.limit);
+    },
+    // args : bookId, userId
+    bookStars: async (parent, args, context, info) => {
+      return await bookStarsService.getBookStars(args.bookId, args.userId);
     },
     profile: async (parent, args, context, info) => {
       if (context.uuid === null) {
-        console.log("uuid is null");
+        console.log('uuid is null');
         return null;
       } else {
-        console.log("Uuid from profile: ", context.uuid);
+        console.log('Uuid from profile: ', context.uuid);
         const user = await userService.getUser(context.uuid);
         return user;
       }

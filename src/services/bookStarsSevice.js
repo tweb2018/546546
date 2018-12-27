@@ -43,7 +43,16 @@ class BookStarsService {
   }
 
   async getBookStars(bookId, userId) {
-    return await bookStarsDatabase.getBookStars(bookId, userId);
+    const result = await bookStarsDatabase.getBookStars(bookId, userId);
+    if (result === null) {
+      return {
+        bookId: bookId,
+        userId: userId,
+        note: 0
+      };
+    } else {
+      return result;
+    }
   }
 
   async getBookStarsByBookId(bookId) {
