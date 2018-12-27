@@ -1,4 +1,4 @@
-// routes/auth.js
+/* routes/auth.js
 const express = require('express');
 const router = express.Router();
 const { isAuthenticated } = require('../middleware/firebase-auth');
@@ -34,4 +34,4 @@ router.get(route.profile, isAuthenticated, (req, res, next) => {
   });
 });
 
-module.exports = router;
+module.exports = router;*/

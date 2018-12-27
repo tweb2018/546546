@@ -55,7 +55,6 @@ getUuidToken = authToken => {
       })
       .catch(err => {
         console.log('Pas de Token fourni');
-        //console.log(err);
       });
   }
 };

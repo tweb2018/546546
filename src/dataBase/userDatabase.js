@@ -79,7 +79,9 @@ class UserDatabase extends DataBase {
    *
    ************************************************************ */
   async updateUser(user) {
-    const result = await Book.findOneAndUpdate(
+    console.log('edited User before', user);
+
+    await User.findOneAndUpdate(
       {
         id: user.id
       },
@@ -87,8 +89,9 @@ class UserDatabase extends DataBase {
       {
         runValidators: true
       }
-    );
-    return this.createResultUser(result);
+    ).then(res => {
+      console.log('edited User result', res);
+    });
   }
 }
 

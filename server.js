@@ -20,7 +20,6 @@ const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
-//app.use(route.api, auth);
 
 /* istanbul ignore if  */
 if (process.env.NODE_MODE !== 'test') {
@@ -31,13 +30,10 @@ if (process.env.NODE_MODE !== 'test') {
     resolvers,
     context: async ({ req }) => {
       const token = req.headers.authorization || '';
-      //console.log('jwt-token recieved: ', token);
       const uuid = await getUuidToken(token).catch(() => {
         return null;
       });
 
-      // TODO uuid is not passed to context.
-      //console.log('uuid: ', uuid);
       return { uuid };
     }
   });

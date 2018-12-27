@@ -1,4 +1,6 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require('apollo-server-express');
+const firebaseAdmin = require('firebase-admin');
+
 const {
   GraphQLEmail,
   GraphQLURL,
@@ -6,11 +8,11 @@ const {
   GraphQLLimitedString,
   GraphQLPassword,
   GraphQLUUID
-} = require("graphql-custom-types");
+} = require('graphql-custom-types');
 
-const bookService = require("../services/bookService");
-const bookStarsService = require("../services/bookStarsSevice");
-const userService = require("../services/userService");
+const bookService = require('../services/bookService');
+const bookStarsService = require('../services/bookStarsSevice');
+const userService = require('../services/userService');
 
 /* istanbul ignore next  */
 const typeDefs = gql`
@@ -127,10 +129,10 @@ const resolvers = {
     },
     profile: async (parent, args, context, info) => {
       if (context.uuid === null) {
-        console.log("uuid is null");
+        console.log('uuid is null');
         return null;
       } else {
-        console.log("Uuid from profile: ", context.uuid);
+        console.log('Uuid from profile: ', context.uuid);
         const user = await userService.getUser(context.uuid);
         return user;
       }
@@ -163,10 +165,13 @@ const resolvers = {
         email: data.email
       };
       userService.insertUser(user);
-      console.log(`User ${user.email} was inserted in dataBase`);
+      console.log(`User ${user.email} was INSTERTED in db`);
       return user;
     },
+    // Not the best way to handle user profile change
+    // TODO if(time){ changeThisMethod();}
     editUser: (_, { data }) => {
+      console.log('Edit user -> ', data);
       const user = {
         id: data.id,
         login: data.login,
@@ -174,8 +179,13 @@ const resolvers = {
         last_name: data.last_name,
         email: data.email
       };
-      userService.insertUser(user);
-      console.log(`User ${user.email} was edited in dataBase`);
+      userService.updateUser(user);
+      //change email in firebase
+      firebaseAdmin.auth().updateUser(data.id, {
+        email: data.email
+      });
+
+      console.log(`User ${user.email} was EDITED in db`);
       return user;
     },
     insertBookStars: async (_, { data }) => {
