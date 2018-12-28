@@ -199,15 +199,12 @@ const resolvers = {
       console.log('data: ', data);
 
       if (data.password !== null) {
-        console.log('Dans editPassword ()');
-
         return firebaseAdmin
           .auth()
           .updateUser(data.id, {
             password: data.password
           })
           .then(() => {
-            console.log('Password Saved');
             return true;
           })
           .catch(error => {
