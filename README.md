@@ -11,7 +11,9 @@ Functionnalities
 - Show the details and the users comments of the book
 - Add a comment if the user sign in
 
-The website link [https://book-book-rzcinxdwsz.now.sh/](https://book-book-rzcinxdwsz.now.sh/)
+Frontend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
+
+Backend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
 
 Backend repository [https://github.com/tweb2018/Backend_BookBook](https://github.com/tweb2018/Backend_BookBook)
 
@@ -56,6 +58,14 @@ Then you can run this command in an other terminal to start the server.
 
 ```shell
 npm start
+```
+
+## Run server as live server
+
+Then you can run this command in an other terminal to start the server.
+
+```shell
+npm run dev
 ```
 
 ## Endpoint
@@ -111,6 +121,27 @@ Exemple of Json response
   Comment {
     id:ID!
   }
+}
+```
+
+Example of qraphql query
+
+```{graphql}
+query Movies($offset: Int, $limit: Int) {
+  movies(offset: $offset, limit: $limit) {
+    vote_count
+    video
+    title
+  }
+}
+```
+
+Query variable
+
+```{json}
+{
+  "offset": 4,
+  "limit": 2
 }
 ```
 
