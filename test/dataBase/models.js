@@ -19,7 +19,8 @@ const user = {
 
 const comment = {
   bookId: book.id,
-  userId: user.id
+  userId: user.id,
+  text: 'bla bla!'
 };
 
 const bookStars = {

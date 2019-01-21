@@ -50,7 +50,6 @@ const typeDefs = gql`
     bookStars: [BookStars]
   }
 
-  # TODO => Patrick
   type Comment {
     id: ID!
     bookId: String!
@@ -66,7 +65,6 @@ const typeDefs = gql`
     bookStars(bookId: ID!, userId: ID!): BookStars
   }
 
-  # TODO => Patrick
   input CommentInput {
     id: ID!
     bookId: String!
@@ -147,7 +145,7 @@ const resolvers = {
   },
   Book: {
     comments: async (parent, args, context, info) => {
-      return []; // TODO => Patrick
+      return await bookService.getBookComments(parent.id);
     },
     averageNote: async (parent, args, context, info) => {
       return await bookService.getBookAverageNote(parent.id);
@@ -155,7 +153,7 @@ const resolvers = {
   },
   User: {
     comments: async (parent, args, context, info) => {
-      return []; // TODO => Patrick
+      return await userService.userComments(parent.id);
     },
     bookStars: async (parent, args, context, info) => {
       return await bookService.getBookStarsByUserId(parent.id);
