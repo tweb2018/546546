@@ -1,5 +1,4 @@
 const User = require('../models/users');
-
 const { DataBase } = require('./database');
 
 /* **********************************************************************************************
@@ -86,9 +85,7 @@ class UserDatabase extends DataBase {
       {
         runValidators: true
       }
-    ).then(res => {
-      //console.log('edited User result', res);
-    });
+    );
   }
 }
 

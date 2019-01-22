@@ -135,10 +135,8 @@ const resolvers = {
     },
     profile: async (parent, args, context, info) => {
       if (context.uuid === null) {
-        console.log('uuid is null');
         return null;
       } else {
-        console.log('Uuid from profile: ', context.uuid);
         const user = await userService.getUser(context.uuid);
         return user;
       }
@@ -171,7 +169,6 @@ const resolvers = {
         email: data.email
       };
       userService.insertUser(user);
-      console.log(`User ${user.email} was INSTERTED in db`);
       return user;
     },
     /* Not the best way to handle user profile change
@@ -190,12 +187,10 @@ const resolvers = {
         email: data.email
       });
 
-      console.log(`User ${user.email} was EDITED in db`);
       return user;
     },
     editPassword: (_, { data }) => {
       //if password is not null we set it.
-      console.log('data: ', data);
 
       if (data.password !== null) {
         return firebaseAdmin
@@ -207,7 +202,6 @@ const resolvers = {
             return true;
           })
           .catch(error => {
-            console.log(error);
             return false;
           });
       } else {

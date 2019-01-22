@@ -11,7 +11,6 @@ class CommentsDatabase extends DataBase {
   constructor() {
     super();
     this.insertComment = this.insertComment.bind(this);
-    //this.updateBookStars = this.updateBookStars.bind(this);
     this.getComments = this.getComments.bind(this);
     this.getCommentsByBookId = this.getCommentsByBookId.bind(this);
     this.getCommentsByUserId = this.getCommentsByUserId.bind(this);
