@@ -183,14 +183,7 @@ class BookService {
    */
   async getBookComments(id) {
     console.log('getBookComments => id =>', id);
-    const comments = await commentService.getCommentsByBookId(id);
-
-    if (comments.length === 0) {
-      return 0;
-    } else {
-      /* istanbul ignore next */
-      return comments;
-    }
+    return await commentService.getCommentsByBookId(id);
   }
 }
 

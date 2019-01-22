@@ -67,7 +67,6 @@ const typeDefs = gql`
   }
 
   input CommentInput {
-    id: ID!
     bookId: String!
     userId: String!
     text: String!
@@ -148,11 +147,9 @@ const resolvers = {
   Book: {
     comments: async (parent, args, context, info) => {
       console.log('Book::comments => ', parent.id);
-      console.log(
-        'Book::comments2 =>',
-        await bookService.getBookComments(parent.id)
-      );
-      return await bookService.getBookComments(parent.id);
+      const result = await bookService.getBookComments(parent.id);
+      console.log('RESULT : ' + result);
+      return result;
     },
     averageNote: async (parent, args, context, info) => {
       return await bookService.getBookAverageNote(parent.id);
