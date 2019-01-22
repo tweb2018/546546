@@ -182,14 +182,8 @@ class BookService {
    * @memberof BookService
    */
   async getBookComments(id) {
-    const comments = await commentService.getCommentsByBookId(id);
-
-    if (comments.length === 0) {
-      return 0;
-    } else {
-      /* istanbul ignore next */
-      return comments;
-    }
+    console.log('getBookComments => id =>', id);
+    return await commentService.getCommentsByBookId(id);
   }
 }
 

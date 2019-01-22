@@ -57,9 +57,10 @@ class CommentsDatabase extends DataBase {
    * @returns The comments which match with the bookId
    * @memberof CommentsDatabase
    */
-  async getCommentsByBookId(bookId) {
+  async getCommentsByBookId(id) {
+    console.log('getCommentsByBookId => ', id);
     return await this.getAllComments({
-      bookId: bookId
+      bookId: id
     });
   }
 
@@ -84,6 +85,7 @@ class CommentsDatabase extends DataBase {
    * @memberof CommentsDatabase
    */
   async getAllComments(options = {}) {
+    console.log('getAllComments => ', options.bookId);
     return await Comment.find(options);
   }
 
