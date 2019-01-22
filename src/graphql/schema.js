@@ -13,6 +13,7 @@ const {
 const bookService = require('../services/bookService');
 const bookStarsService = require('../services/bookStarsSevice');
 const userService = require('../services/userService');
+const commentService = require('../services/commentService');
 
 /* istanbul ignore next  */
 const typeDefs = gql`
@@ -30,7 +31,7 @@ const typeDefs = gql`
     summary: String
     published_date: DateTime
     thumbnail: URL
-    comments: [Comment]
+    comments: Comment
     averageNote: Float
   }
 
@@ -52,9 +53,9 @@ const typeDefs = gql`
 
   type Comment {
     id: ID!
-    bookId: String!
-    userId: String!
-    comment: String!
+    bookId: String
+    userId: String
+    text: String
   }
 
   type Query {
@@ -69,7 +70,7 @@ const typeDefs = gql`
     id: ID!
     bookId: String!
     userId: String!
-    comment: String!
+    text: String!
   }
 
   input UserInput {
