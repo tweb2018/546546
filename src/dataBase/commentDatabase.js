@@ -11,7 +11,6 @@ class CommentsDatabase extends DataBase {
   constructor() {
     super();
     this.insertComment = this.insertComment.bind(this);
-    //this.updateBookStars = this.updateBookStars.bind(this);
     this.getComments = this.getComments.bind(this);
     this.getCommentsByBookId = this.getCommentsByBookId.bind(this);
     this.getCommentsByUserId = this.getCommentsByUserId.bind(this);
@@ -58,9 +57,10 @@ class CommentsDatabase extends DataBase {
    * @returns The comments which match with the bookId
    * @memberof CommentsDatabase
    */
-  async getCommentsByBookId(bookId) {
+  async getCommentsByBookId(id) {
+    console.log('getCommentsByBookId => ', id);
     return await this.getAllComments({
-      bookId: bookId
+      bookId: id
     });
   }
 
@@ -85,6 +85,7 @@ class CommentsDatabase extends DataBase {
    * @memberof CommentsDatabase
    */
   async getAllComments(options = {}) {
+    console.log('getAllComments => ', options.bookId);
     return await Comment.find(options);
   }
 

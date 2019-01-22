@@ -31,7 +31,7 @@ const typeDefs = gql`
     summary: String
     published_date: DateTime
     thumbnail: URL
-    comments: Comment
+    comments: [Comment]
     averageNote: Float
   }
 
@@ -94,6 +94,7 @@ const typeDefs = gql`
 
   type Mutation {
     insertUser(data: UserInput!): User
+    insertComment(data: CommentInput!): Comment
     editUser(data: UserInput!): User
     editPassword(data: PasswordInput!): Boolean
     updateBookStars(data: BookStarsInput!): BookStars
@@ -146,6 +147,11 @@ const resolvers = {
   },
   Book: {
     comments: async (parent, args, context, info) => {
+      console.log('Book::comments => ', parent.id);
+      console.log(
+        'Book::comments2 =>',
+        await bookService.getBookComments(parent.id)
+      );
       return await bookService.getBookComments(parent.id);
     },
     averageNote: async (parent, args, context, info) => {
@@ -173,6 +179,16 @@ const resolvers = {
       userService.insertUser(user);
       console.log(`User ${user.email} was INSTERTED in db`);
       return user;
+    },
+    insertComment: (_, { data }) => {
+      const comment = {
+        bookId: data.bookId,
+        userId: data.userId,
+        text: data.text
+      };
+      commentService.insertComment(comment);
+      console.log(`Comment ${comment.text} was INSTERTED in db`);
+      return comment;
     },
     /* Not the best way to handle user profile change
     TODO if(time){ changeThisMethod();}*/

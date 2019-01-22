@@ -43,7 +43,7 @@ class CommentsService {
    * @memberof CommentsService
    */
   async insertComment(comment) {
-    return await commentDatabase.insertComment(comment);
+    return await commentsDatabase.insertComment(comment);
   }
 
   /**
@@ -86,6 +86,7 @@ class CommentsService {
    * @memberof CommentsService
    */
   async getCommentsByBookId(bookId) {
+    console.log('getCommentsByBookId => ', bookId);
     return await commentsDatabase.getCommentsByBookId(bookId);
   }
 
