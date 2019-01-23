@@ -11,6 +11,8 @@ Functionnalities
 - Show the details and the users comments of the book
 - Add a comment if the user sign in
 
+Slides link https://docs.google.com/presentation/d/1I0zUcLrWM9A1cp5rITJ3n2LhZPVHSlRckmlTJa49qXw/edit?usp=sharing
+
 Frontend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
 
 Backend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
