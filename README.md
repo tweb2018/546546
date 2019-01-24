@@ -13,7 +13,7 @@ Functionnalities
 
 Slides link https://docs.google.com/presentation/d/1I0zUcLrWM9A1cp5rITJ3n2LhZPVHSlRckmlTJa49qXw/edit?usp=sharing
 
-Frontend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
+Frontend link [https://book-book-frontend.herokuapp.com/](https://book-book-frontend.herokuapp.com/)
 
 Backend link [https://book-book-backend.herokuapp.com/](https://book-book-backend.herokuapp.com/)
 
