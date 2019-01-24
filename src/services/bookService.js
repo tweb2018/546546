@@ -1,6 +1,7 @@
 const googleBooks = require('google-books-search');
 const bookDatabase = require('../dataBase/bookDatabase');
 const bookStarsService = require('../services/bookStarsSevice');
+const commentService = require('../services/commentService');
 
 /**
  * Book service features
@@ -171,6 +172,18 @@ class BookService {
 
       return Math.round(noteAverage * 2) / 2;
     }
+  }
+
+  /**
+   * Get the book comments which match with the id
+   *
+   * @param {*} id The book id to find the comments
+   * @returns The book comments
+   * @memberof BookService
+   */
+  async getBookComments(id) {
+    console.log('getBookComments => id =>', id);
+    return await commentService.getCommentsByBookId(id);
   }
 }
 

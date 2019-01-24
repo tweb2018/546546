@@ -13,6 +13,7 @@ const {
 const bookService = require('../services/bookService');
 const bookStarsService = require('../services/bookStarsSevice');
 const userService = require('../services/userService');
+const commentService = require('../services/commentService');
 
 /* istanbul ignore next  */
 const typeDefs = gql`
@@ -50,12 +51,11 @@ const typeDefs = gql`
     bookStars: [BookStars]
   }
 
-  # TODO => Patrick
   type Comment {
     id: ID!
-    bookId: String!
-    userId: String!
-    comment: String!
+    bookId: String
+    userId: String
+    text: String
   }
 
   type Query {
@@ -66,12 +66,10 @@ const typeDefs = gql`
     bookStars(bookId: ID!, userId: ID!): BookStars
   }
 
-  # TODO => Patrick
   input CommentInput {
-    id: ID!
     bookId: String!
     userId: String!
-    comment: String!
+    text: String!
   }
 
   input UserInput {
@@ -95,6 +93,7 @@ const typeDefs = gql`
 
   type Mutation {
     insertUser(data: UserInput!): User
+    insertComment(data: CommentInput!): Comment
     editUser(data: UserInput!): User
     editPassword(data: PasswordInput!): Boolean
     updateBookStars(data: BookStarsInput!): BookStars
@@ -136,10 +135,8 @@ const resolvers = {
     },
     profile: async (parent, args, context, info) => {
       if (context.uuid === null) {
-        console.log('uuid is null');
         return null;
       } else {
-        console.log('Uuid from profile: ', context.uuid);
         const user = await userService.getUser(context.uuid);
         return user;
       }
@@ -147,7 +144,10 @@ const resolvers = {
   },
   Book: {
     comments: async (parent, args, context, info) => {
-      return []; // TODO => Patrick
+      console.log('Book::comments => ', parent.id);
+      const result = await bookService.getBookComments(parent.id);
+      console.log('RESULT : ' + result);
+      return result;
     },
     averageNote: async (parent, args, context, info) => {
       return await bookService.getBookAverageNote(parent.id);
@@ -155,7 +155,7 @@ const resolvers = {
   },
   User: {
     comments: async (parent, args, context, info) => {
-      return []; // TODO => Patrick
+      return await userService.userComments(parent.id);
     },
     bookStars: async (parent, args, context, info) => {
       return await bookService.getBookStarsByUserId(parent.id);
@@ -172,8 +172,17 @@ const resolvers = {
         email: data.email
       };
       userService.insertUser(user);
-      console.log(`User ${user.email} was INSTERTED in db`);
       return user;
+    },
+    insertComment: (_, { data }) => {
+      const comment = {
+        bookId: data.bookId,
+        userId: data.userId,
+        text: data.text
+      };
+      commentService.insertComment(comment);
+      console.log(`Comment ${comment.text} was INSTERTED in db`);
+      return comment;
     },
     /* Not the best way to handle user profile change
     TODO if(time){ changeThisMethod();}*/
@@ -191,12 +200,10 @@ const resolvers = {
         email: data.email
       });
 
-      console.log(`User ${user.email} was EDITED in db`);
       return user;
     },
     editPassword: (_, { data }) => {
       //if password is not null we set it.
-      console.log('data: ', data);
 
       if (data.password !== null) {
         return firebaseAdmin
@@ -208,7 +215,6 @@ const resolvers = {
             return true;
           })
           .catch(error => {
-            console.log(error);
             return false;
           });
       } else {

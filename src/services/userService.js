@@ -1,4 +1,5 @@
 const userDataBase = require('../dataBase/userDatabase');
+const commentDatabase = require('../dataBase/commentDatabase');
 
 class UserService {
   async getUser(id) {
@@ -15,7 +16,7 @@ class UserService {
   }
 
   async userComments(userId) {
-    // TODO => Patrick
+    return await commentDatabase.getCommentsByUserId(userId);
   }
   /*  Optional */
   // Delete profile
